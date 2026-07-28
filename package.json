@@ -1,0 +1,46 @@
+{
+  "name": "gc-tracker",
+  "version": "0.1.0",
+  "description": "Tracker local para Grand Chase Classic.",
+  "main": "main.js",
+  "private": true,
+  "author": "Thiago",
+  "scripts": {
+    "start": "electron .",
+    "desktop": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "local.gctracker.app",
+    "productName": "GC Tracker",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "styles.css",
+      "app.js",
+      "main.js",
+      "assets/**/*"
+    ],
+    "win": {
+      "icon": "assets/icons/gc-tracker-jin.ico",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "GC Tracker.exe"
+    }
+  }
+}
