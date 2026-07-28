@@ -16,6 +16,10 @@ O projeto organiza progresso por personagem, rotina, itens, títulos, conjunto v
 - Exportação e importação de snapshot em JSON.
 - Versão desktop com Electron.
 
+## Histórico
+
+O progresso por data está documentado em [CHANGELOG.md](./CHANGELOG.md).
+
 ## Rodar localmente
 
 ```powershell
