@@ -2341,6 +2341,33 @@ dialog footer { border-top: 1px solid var(--line); border-bottom: 0; }
   background: radial-gradient(circle at 45% 35%, #b9d9ff, #526e9b 58%, #1e2a45 100%);
 }
 
+.equipment-item-icon.item-slot,
+.equipment-item-icon.item-empty {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #9eb7d6, #6f88aa);
+  border: 3px solid rgba(218,231,247,.78);
+  box-shadow: inset 0 2px 8px rgba(255,255,255,.18), inset 0 -10px 18px rgba(31,51,82,.35);
+}
+
+.equipment-item-icon.item-slot::after,
+.equipment-item-icon.item-empty::after {
+  display: none;
+}
+
+.equipment-item-icon.item-slot .equipment-empty-icon,
+.equipment-item-icon.item-empty .equipment-empty-icon {
+  width: 36px;
+  height: 36px;
+  opacity: .86;
+  filter: drop-shadow(0 2px 2px rgba(255,255,255,.2));
+}
+
+.equipment-item-icon.item-empty {
+  opacity: .62;
+  filter: grayscale(.25);
+}
+
 .slot-editor-main {
   min-width: 0;
   display: grid;

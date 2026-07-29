@@ -249,6 +249,70 @@ const equipmentCatalog = {
   ]
 };
 
+const equipmentMainAttributeBySlot = {
+  "Elmo": "Defesa +914",
+  "Cota": "Defesa +1.120",
+  "Calça": "Defesa +914",
+  "Luva": "Ataque +608",
+  "Sapato": "Defesa +608",
+  "Capa": "Ataque +431",
+  "Arma principal": "Ataque +1.820",
+  "Diadema": "Defesa +431",
+  "Máscara": "Defesa +431",
+  "Asas": "Ataque +560",
+  "Facas": "Ataque +560",
+  "Escudos": "Defesa +560",
+  "Arma secundária": "Ataque +914",
+  "Anel": "Ataque +431",
+  "Colar": "Defesa +431",
+  "Tornozeleira": "Defesa +431",
+  "Brinco ou piercing 1": "Ataque +361",
+  "Brinco ou piercing 2": "Ataque +361"
+};
+
+gcFarmCatalog.equipmentSlots.forEach(slot => {
+  if (!equipmentCatalog[slot]) {
+    equipmentCatalog[slot] = [equipmentCatalogFallbackItem(slot)];
+  }
+});
+
+function equipmentCatalogFallbackItem(slot) {
+  const slug = slot
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  return {
+    id: `void-observer-${slug}`,
+    name: `${slot} do Observador do Vazio`,
+    type: slot.toLowerCase(),
+    level: 85,
+    rarity: "Ancestral",
+    iconClass: "item-slot",
+    slotIconClass: equipmentSlotIconClass(slot),
+    mainAttributes: [equipmentMainAttributeBySlot[slot] || "Atributo principal pendente"],
+    secondaryLimit: 5,
+    secondaryRanges: {
+      attack: "Faixa: 361 até 560",
+      defense: "Faixa: 131 até 330",
+      vitality: "Faixa: 131 até 330",
+      hpRecovery: "Faixa: 10,05 até 20,00%",
+      mpRecovery: "Faixa: 4,02 até 8,00%",
+      gpGain: "Faixa: 0,19 até 2,18%",
+      specialAttack: "Faixa: 602 até 1.000",
+      specialDefense: "Faixa: 202 até 600",
+      critChance: "Faixa: 1,61 até 3,60%",
+      critDamage: "Faixa: 16,08 até 32,00%",
+      contaminationResist: "Faixa: 1,10 até 3,09%",
+      backAttackDamage: "Faixa: 1,02 até 5,00%",
+      expGain: "Faixa: 0,10 até 2,09%",
+      infernalChance: "Faixa: 0,02 até 4,00%",
+      infernalDamage: "Faixa: 15 até 3.000"
+    }
+  };
+}
+
 const gcFarmMissionIcons = {
   forno: "https://gcfarm.com.br/img/missoes-desafios/01_fornalha_infernal.webp",
   altar: "https://gcfarm.com.br/img/missoes-desafios/02_altar_da_ruina.webp",
@@ -767,6 +831,9 @@ function equipmentItemById(slot, id) {
 }
 
 function equipmentItemIcon(item) {
+  if (item?.slotIconClass) {
+    return `<span class="equipment-item-icon ${item.iconClass || "item-slot"}"><span class="equipment-empty-icon ${item.slotIconClass}" aria-hidden="true"></span></span>`;
+  }
   return `<span class="equipment-item-icon ${item?.iconClass || "item-generic"}"></span>`;
 }
 
@@ -1752,17 +1819,18 @@ function currentEquipmentSlotData() {
 
 function renderEquipmentSlotEditor() {
   const data = currentEquipmentSlotData();
-  const item = equipmentItemById(selectedEquipmentSlot, data.itemId) || equipmentCatalog[selectedEquipmentSlot]?.[0] || {
+  const item = equipmentItemById(selectedEquipmentSlot, data.itemId) || {
     id: "",
-    name: data.name || selectedEquipmentSlot,
+    name: data.name || "Nenhum equipamento selecionado",
     type: selectedEquipmentSlot.toLowerCase(),
     level: "",
     rarity: data.rarity || "",
+    iconClass: "item-empty",
+    slotIconClass: equipmentSlotIconClass(selectedEquipmentSlot),
     mainAttributes: [],
     secondaryLimit: 3,
     secondaryRanges: {}
   };
-  if (!data.itemId && !data.name && equipmentCatalog[selectedEquipmentSlot]?.length) applyEquipmentItem(item.id, false);
   const selectedItem = equipmentItemById(selectedEquipmentSlot, currentEquipmentSlotData().itemId) || item;
   document.querySelector("#editorTitle").textContent = "";
   document.querySelector("#editorBody").innerHTML = `
