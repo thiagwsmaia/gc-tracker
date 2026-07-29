@@ -5,6 +5,7 @@
 - Expansão inicial do catálogo de equipamentos para todos os slots.
 - O editor de equipamento agora mantém o slot vazio ao abrir, sem selecionar item automaticamente.
 - Adição de ícones internos por tipo de slot no catálogo do editor.
+- Adição de progresso de equipamentos por personagem, com contador de slots preenchidos e barra visual.
 - Validação do editor com Chrome/Playwright.
 
 ## 2026-07-28

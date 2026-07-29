@@ -710,6 +710,7 @@ function setCharacterSort(value) {
 
 function equipmentCard(char) {
   const attack = char.attack || 0;
+  const progress = equipmentCompletion(char);
   return `
     <article class="equipment-card">
       <div class="equipment-portrait">
@@ -723,6 +724,10 @@ function equipmentCard(char) {
           </div>
           <button class="edit-square" onclick="openEditor('${char.name}')" title="Editar ${char.name}">✎</button>
         </div>
+        <div class="equipment-progress" title="${progress.filled}/${progress.total} slots preenchidos">
+          <span>${progress.filled}/${progress.total}</span>
+          <div><i style="width:${progress.percent}%"></i></div>
+        </div>
         <div class="equipment-slots">
           ${gcFarmCatalog.equipmentSlots.map(slot => equipmentSlotButton(char, slot)).join("")}
         </div>
@@ -731,17 +736,34 @@ function equipmentCard(char) {
   `;
 }
 
+function equipmentCompletion(char) {
+  const slots = char.equipment?.slots || {};
+  const filled = gcFarmCatalog.equipmentSlots.filter(slot => {
+    const data = normalizeEquipmentSlot(slot, slots[slot] || {});
+    return Boolean(data.itemId || data.kind || data.name);
+  }).length;
+  const total = gcFarmCatalog.equipmentSlots.length;
+  return { filled, total, percent: total ? Math.round((filled / total) * 100) : 0 };
+}
+
 function equipmentSlotButton(char, slot) {
   const data = normalizeEquipmentSlot(slot, char.equipment?.slots?.[slot] || {});
   const filled = data.itemId || data.kind || data.name;
   const item = equipmentItemById(slot, data.itemId);
-  const summary = filled ? (data.rarity || data.kind || item?.name || data.name) : slot;
+  const summary = filled ? equipmentSlotSummary(data, item) : slot;
+  const fullTitle = filled ? `${slot}: ${item?.name || data.name || data.kind || "preenchido"}${data.rarity ? ` (${data.rarity})` : ""}` : slot;
   return `
-    <button class="equipment-slot ${filled ? "has-item" : ""}" title="${escapeHtml(slot)}${filled ? `: ${escapeHtml(summary)}` : ""}" onclick="openEquipmentSlot('${char.name}', '${slot}')">
+    <button class="equipment-slot ${filled ? "has-item" : ""}" title="${escapeHtml(fullTitle)}" onclick="openEquipmentSlot('${char.name}', '${slot}')">
       ${filled ? equipmentItemIcon(item || { iconClass: "item-generic" }) : equipmentSlotPlaceholderIcon(slot)}
       <small>${escapeHtml(summary)}</small>
     </button>
   `;
+}
+
+function equipmentSlotSummary(data, item) {
+  const rarity = data.rarity || item?.rarity || data.kind || "Equipado";
+  const fort = Number(data.fortification || 0);
+  return fort > 0 ? `${rarity} +${fort}` : rarity;
 }
 
 function equipmentSlotPlaceholderIcon(slot) {

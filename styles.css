@@ -406,6 +406,42 @@ h3 { font-size: 16px; }
   font-weight: 700;
 }
 
+.equipment-progress {
+  margin-top: 9px;
+  display: grid;
+  grid-template-columns: auto minmax(72px, 1fr);
+  align-items: center;
+  gap: 8px;
+  color: #b8d3ff;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.equipment-progress span {
+  min-width: 38px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  text-align: center;
+  background: rgba(81, 119, 180, .28);
+  border: 1px solid rgba(122, 161, 229, .38);
+}
+
+.equipment-progress div {
+  height: 7px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(8, 13, 28, .72);
+  border: 1px solid rgba(123, 150, 196, .24);
+}
+
+.equipment-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #36d6ff, #75ff9f);
+  box-shadow: 0 0 10px rgba(54, 214, 255, .28);
+}
+
 .equipment-slots {
   margin-top: 10px;
   display: grid;
