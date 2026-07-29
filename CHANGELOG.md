@@ -6,6 +6,7 @@
 - O editor de equipamento agora mantém o slot vazio ao abrir, sem selecionar item automaticamente.
 - Adição de ícones internos por tipo de slot no catálogo do editor.
 - Adição de progresso de equipamentos por personagem, com contador de slots preenchidos e barra visual.
+- Adição de controles para reordenar personagens diretamente na aba Personagens.
 - Validação do editor com Chrome/Playwright.
 
 ## 2026-07-28

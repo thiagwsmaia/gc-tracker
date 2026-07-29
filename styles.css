@@ -406,6 +406,29 @@ h3 { font-size: 16px; }
   font-weight: 700;
 }
 
+.equipment-order-actions {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 34px);
+  gap: 6px;
+}
+
+.equipment-order-actions button {
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid rgba(137, 180, 255, .42);
+  background: rgba(42, 62, 99, .78);
+  color: #d9e8ff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.equipment-order-actions button:hover {
+  border-color: rgba(255, 212, 76, .75);
+  color: #ffd44c;
+  background: rgba(53, 72, 111, .92);
+}
+
 .equipment-progress {
   margin-top: 9px;
   display: grid;

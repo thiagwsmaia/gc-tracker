@@ -354,6 +354,7 @@ const seed = {
   titleOrder: [],
   dailyOrder: [],
   voidOrder: [],
+  characterOrder: [],
   account: {
     nickname: "thiaggo",
     plan: "Padrão",
@@ -477,6 +478,14 @@ function migrateState(saved) {
   });
   migrated.visualSet = { ...seed.visualSet, ...(saved.visualSet || {}) };
   migrated.visualCollectionOwned = { ...(saved.visualCollectionOwned || {}) };
+  migrated.characterOrder = saved.characterOrder || (saved.characters || [])
+    .sort((a, b) => a.order - b.order)
+    .map(char => char.name);
+  if (!migrated.characterOrder.length) {
+    migrated.characterOrder = [...seed.characters]
+      .sort((a, b) => a.order - b.order)
+      .map(char => char.name);
+  }
   migrated.dailyOrder = saved.dailyOrder || (saved.characters || [])
     .sort((a, b) => a.order - b.order)
     .map(char => char.name);
@@ -697,10 +706,10 @@ function renderCharacters() {
 }
 
 function characterSorter(a, b) {
-  if (characterSort === "attack") return (b.attack || b.ta) - (a.attack || a.ta) || a.order - b.order;
+  if (characterSort === "attack") return (b.attack || b.ta) - (a.attack || a.ta) || characterOrderIndex(a.name) - characterOrderIndex(b.name);
   if (characterSort === "name") return a.name.localeCompare(b.name, "pt-BR");
-  if (characterSort === "voids") return voidTotal(b) - voidTotal(a) || a.order - b.order;
-  return a.order - b.order;
+  if (characterSort === "voids") return voidTotal(b) - voidTotal(a) || characterOrderIndex(a.name) - characterOrderIndex(b.name);
+  return characterOrderIndex(a.name) - characterOrderIndex(b.name);
 }
 
 function setCharacterSort(value) {
@@ -711,6 +720,12 @@ function setCharacterSort(value) {
 function equipmentCard(char) {
   const attack = char.attack || 0;
   const progress = equipmentCompletion(char);
+  const orderControls = characterSort === "order"
+    ? `<div class="equipment-order-actions">
+        <button type="button" title="Mover ${char.name} para esquerda" onclick="moveCharacterCard('${char.name}', -1)">◀</button>
+        <button type="button" title="Mover ${char.name} para direita" onclick="moveCharacterCard('${char.name}', 1)">▶</button>
+      </div>`
+    : "";
   return `
     <article class="equipment-card">
       <div class="equipment-portrait">
@@ -724,6 +739,7 @@ function equipmentCard(char) {
           </div>
           <button class="edit-square" onclick="openEditor('${char.name}')" title="Editar ${char.name}">✎</button>
         </div>
+        ${orderControls}
         <div class="equipment-progress" title="${progress.filled}/${progress.total} slots preenchidos">
           <span>${progress.filled}/${progress.total}</span>
           <div><i style="width:${progress.percent}%"></i></div>
@@ -734,6 +750,30 @@ function equipmentCard(char) {
       </div>
     </article>
   `;
+}
+
+function characterOrderNames() {
+  const fallback = [...state.characters]
+    .sort((a, b) => a.order - b.order)
+    .map(char => char.name);
+  const saved = Array.isArray(state.characterOrder) ? state.characterOrder : [];
+  return [...saved.filter(name => fallback.includes(name)), ...fallback.filter(name => !saved.includes(name))];
+}
+
+function characterOrderIndex(name) {
+  const index = characterOrderNames().indexOf(name);
+  return index >= 0 ? index : 999;
+}
+
+function moveCharacterCard(name, direction) {
+  const order = characterOrderNames();
+  const index = order.indexOf(name);
+  const targetIndex = index + direction;
+  if (index < 0 || targetIndex < 0 || targetIndex >= order.length) return;
+  [order[index], order[targetIndex]] = [order[targetIndex], order[index]];
+  state.characterOrder = order;
+  saveState();
+  renderCharacters();
 }
 
 function equipmentCompletion(char) {
