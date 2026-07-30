@@ -7,6 +7,7 @@
 - Marcação de set Void completo inferido por fundos vermelhos no print.
 - Adição da arma secundária/reserva de Berkas ao catálogo e ao Jin.
 - Marcação do brinco do Jin como lendário pelo fundo roxo.
+- Adição de indicadores de poder por personagem: Ataque + Ataque Especial, Dano Crítico 900/1000 e Acerto Crítico 100%.
 
 ## 2026-07-29
 

@@ -361,10 +361,24 @@ const titleBoardItems = [
   { id: "exp-3", name: "Experiência III", category: "Experiência", icon: "./assets/title-icons/exp-3-no-star-v8.png" }
 ];
 
+const powerIndicatorTargets = {
+  combinedAttack: 70000,
+  critDamage900: 900,
+  critDamage1000: 1000,
+  critChance100: 100
+};
+
 const screenshotEquipmentFindings = {
   Jin: {
     ta: 1192,
     attack: 1192612,
+    power: {
+      attack: 41844,
+      specialAttack: 29572,
+      combinedAttack: 71416,
+      critDamage: 982.07,
+      critChance: 105.94
+    },
     reviewStatus: "print-confirmed",
     source: {
       nonVisual: "print 2026-07-30",
@@ -377,6 +391,7 @@ const screenshotEquipmentFindings = {
     notes: [
       "Print 2026-07-30: identificado como Jin.",
       "Ataque Total lido no print: 1.192.612; marco de 1000 AT considerado completo.",
+      "Indicadores de poder do print: Ataque + Ataque Especial = 71.416; Dano Crítico 982,07%; Acerto Crítico 105,94%.",
       "Set Void completo inferido pelos fundos vermelhos nos equipamentos.",
       "Arma secundária/reserva identificada como Berkas.",
       "Brinco marcado como lendário pelo fundo roxo."
@@ -588,6 +603,7 @@ function applyScreenshotFindings(targetState) {
     char.attack = finding.attack ?? char.attack;
     char.reviewStatus = finding.reviewStatus || char.reviewStatus;
     char.source = { ...(char.source || {}), ...(finding.source || {}) };
+    char.power = { ...(char.power || {}), ...(finding.power || {}) };
     char.accessories = { ...(char.accessories || {}), ...(finding.accessories || {}) };
     char.titleStatus = { ...(char.titleStatus || {}), ...(finding.titleStatus || {}) };
     char.notes = mergeNotes(char.notes, finding.notes);
@@ -828,6 +844,7 @@ function setCharacterSort(value) {
 function equipmentCard(char) {
   const attack = char.attack || 0;
   const progress = equipmentCompletion(char);
+  const indicators = powerIndicators(char);
   const orderControls = characterSort === "order"
     ? `<div class="equipment-order-actions">
         <button type="button" title="Mover ${char.name} para esquerda" onclick="moveCharacterCard('${char.name}', -1)">◀</button>
@@ -852,12 +869,50 @@ function equipmentCard(char) {
           <span>${progress.filled}/${progress.total}</span>
           <div><i style="width:${progress.percent}%"></i></div>
         </div>
+        ${indicators.length ? `<div class="power-indicators">${indicators.map(powerIndicatorChip).join("")}</div>` : ""}
         <div class="equipment-slots">
           ${gcFarmCatalog.equipmentSlots.map(slot => equipmentSlotButton(char, slot)).join("")}
         </div>
       </div>
     </article>
   `;
+}
+
+function powerIndicators(char) {
+  const power = char.power || {};
+  const combined = Number(power.combinedAttack || 0) || Number(power.attack || 0) + Number(power.specialAttack || 0);
+  const critDamage = Number(power.critDamage || 0);
+  const critChance = Number(power.critChance || 0);
+  return [
+    {
+      label: "ATK+AE",
+      value: combined ? combined.toLocaleString("pt-BR") : "-",
+      ready: combined >= powerIndicatorTargets.combinedAttack,
+      title: `Ataque + Ataque Especial${combined ? `: ${combined.toLocaleString("pt-BR")}` : ""}`
+    },
+    {
+      label: "DC 900",
+      value: critDamage ? `${critDamage.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%` : "-",
+      ready: critDamage >= powerIndicatorTargets.critDamage900,
+      title: `Dano Crítico >= 900%`
+    },
+    {
+      label: "DC 1000",
+      value: critDamage ? `${critDamage.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%` : "-",
+      ready: critDamage >= powerIndicatorTargets.critDamage1000,
+      title: `Dano Crítico >= 1000%`
+    },
+    {
+      label: "AC 100",
+      value: critChance ? `${critChance.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%` : "-",
+      ready: critChance >= powerIndicatorTargets.critChance100,
+      title: `Acerto Crítico >= 100%`
+    }
+  ].filter(item => item.value !== "-");
+}
+
+function powerIndicatorChip(item) {
+  return `<span class="power-chip ${item.ready ? "is-ready" : "is-low"}" title="${escapeHtml(item.title)}"><b>${item.label}</b><small>${escapeHtml(item.value)}</small></span>`;
 }
 
 function characterOrderNames() {
