@@ -1,5 +1,13 @@
 # Histórico do projeto
 
+## 2026-07-30
+
+- Registro do print do Jin como evidência confirmada.
+- Atualização do Jin para Ataque Total 1.192.612 e marco de 1000 AT completo.
+- Marcação de set Void completo inferido por fundos vermelhos no print.
+- Adição da arma secundária/reserva de Berkas ao catálogo e ao Jin.
+- Marcação do brinco do Jin como lendário pelo fundo roxo.
+
 ## 2026-07-29
 
 - Expansão inicial do catálogo de equipamentos para todos os slots.

@@ -276,6 +276,19 @@ gcFarmCatalog.equipmentSlots.forEach(slot => {
   }
 });
 
+equipmentCatalog["Arma secundária"].push({
+  id: "berkas-reserve-weapon",
+  name: "Arma de Reserva de Berkas",
+  type: "arma secundária",
+  level: 85,
+  rarity: "Lendário",
+  iconClass: "item-berkas",
+  slotIconClass: "slot-secondary",
+  mainAttributes: ["Arma reserva identificada no print"],
+  secondaryLimit: 3,
+  secondaryRanges: {}
+});
+
 function equipmentCatalogFallbackItem(slot) {
   const slug = slot
     .normalize("NFD")
@@ -347,6 +360,50 @@ const titleBoardItems = [
   { id: "exp-2", name: "Experiência II", category: "Experiência", icon: "./assets/title-icons/exp-2.png" },
   { id: "exp-3", name: "Experiência III", category: "Experiência", icon: "./assets/title-icons/exp-3-no-star-v8.png" }
 ];
+
+const screenshotEquipmentFindings = {
+  Jin: {
+    ta: 1192,
+    attack: 1192612,
+    reviewStatus: "print-confirmed",
+    source: {
+      nonVisual: "print 2026-07-30",
+      equipment: "print 2026-07-30"
+    },
+    accessories: {
+      earrings: "legendary"
+    },
+    titleStatus: titleStatusDefault(1192),
+    notes: [
+      "Print 2026-07-30: identificado como Jin.",
+      "Ataque Total lido no print: 1.192.612; marco de 1000 AT considerado completo.",
+      "Set Void completo inferido pelos fundos vermelhos nos equipamentos.",
+      "Arma secundária/reserva identificada como Berkas.",
+      "Brinco marcado como lendário pelo fundo roxo."
+    ].join("\n"),
+    equipment: {
+      weapon: "Set Void completo",
+      armor: "Void completo",
+      ring: "Void",
+      slots: {
+        "Elmo": printSlot("Elmo", "void-observer-helm", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Cota": printSlot("Cota", "void-observer-cota", "Ancestral", 10, "Void confirmado pelo fundo vermelho no print."),
+        "Calça": printSlot("Calça", "void-observer-calca", "Ancestral", 0, "Parte do set Void completo inferido pelo print."),
+        "Luva": printSlot("Luva", "void-observer-luva", "Ancestral", 18, "Void confirmado pelo fundo vermelho no print."),
+        "Sapato": printSlot("Sapato", "void-observer-sapato", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Capa": printSlot("Capa", "void-observer-capa", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Arma principal": printSlot("Arma principal", "void-observer-arma-principal", "Ancestral", 17, "Arma Void confirmada pelo fundo vermelho no print."),
+        "Arma secundária": printSlot("Arma secundária", "berkas-reserve-weapon", "Lendário", 0, "Arma reserva de Berkas identificada no print."),
+        "Diadema": printSlot("Diadema", "void-observer-diadema", "Ancestral", 9, "Parte do set Void completo inferido pelo print."),
+        "Máscara": printSlot("Máscara", "void-observer-mascara", "Ancestral", 0, "Parte do set Void completo inferido pelo print."),
+        "Asas": printSlot("Asas", "void-observer-asas", "Ancestral", 0, "Parte do set Void completo inferido pelo print."),
+        "Facas": printSlot("Facas", "void-observer-facas", "Ancestral", 0, "Parte do set Void completo inferido pelo print."),
+        "Escudos": printSlot("Escudos", "void-observer-escudos", "Ancestral", 0, "Parte do set Void completo inferido pelo print."),
+        "Brinco ou piercing 1": printSlot("Brinco ou piercing 1", "void-observer-brinco-ou-piercing-1", "Lendário", 0, "Brinco lendário pelo fundo roxo no print.")
+      }
+    }
+  }
+};
 
 const seed = {
   lastImport: "2026-07-24",
@@ -441,6 +498,8 @@ const seed = {
   }))
 };
 
+applyScreenshotFindings(seed);
+
 let state = loadState();
 let currentView = "dashboard";
 let selectedCharacter = null;
@@ -517,7 +576,50 @@ function migrateState(saved) {
   if (!migrated.visualOrder.length) migrated.visualOrder = seed.visualOrder;
   migrated.account = { ...seed.account, ...(saved.account || {}) };
   migrated.dataPolicy = seed.dataPolicy;
+  applyScreenshotFindings(migrated);
   return migrated;
+}
+
+function applyScreenshotFindings(targetState) {
+  Object.entries(screenshotEquipmentFindings).forEach(([name, finding]) => {
+    const char = targetState.characters.find(item => item.name === name);
+    if (!char) return;
+    char.ta = finding.ta ?? char.ta;
+    char.attack = finding.attack ?? char.attack;
+    char.reviewStatus = finding.reviewStatus || char.reviewStatus;
+    char.source = { ...(char.source || {}), ...(finding.source || {}) };
+    char.accessories = { ...(char.accessories || {}), ...(finding.accessories || {}) };
+    char.titleStatus = { ...(char.titleStatus || {}), ...(finding.titleStatus || {}) };
+    char.notes = mergeNotes(char.notes, finding.notes);
+    char.equipment = {
+      ...(char.equipment || {}),
+      ...(finding.equipment || {}),
+      slots: {
+        ...mergeEquipmentSlots(char.equipment?.slots || {}),
+        ...mergePartialEquipmentSlots(finding.equipment?.slots || {})
+      }
+    };
+  });
+}
+
+function mergeNotes(current = "", incoming = "") {
+  if (!incoming) return current || "";
+  if (!current) return incoming;
+  return current.includes(incoming.split("\n")[0]) ? current : `${current}\n\n${incoming}`;
+}
+
+function printSlot(slot, itemId, rarity, fortification = 0, notes = "") {
+  const item = equipmentItemById(slot, itemId);
+  return {
+    ...equipmentSlotDefault(slot),
+    itemId,
+    name: item?.name || "",
+    kind: item?.type || slot.toLowerCase(),
+    rarity,
+    fortification,
+    notes,
+    tab: "attributes"
+  };
 }
 
 function mergeEquipmentSlots(savedSlots = {}) {
@@ -525,6 +627,12 @@ function mergeEquipmentSlots(savedSlots = {}) {
     slot,
     normalizeEquipmentSlot(slot, savedSlots[slot])
   ]));
+}
+
+function mergePartialEquipmentSlots(savedSlots = {}) {
+  return Object.fromEntries(Object.entries(savedSlots)
+    .filter(([slot]) => gcFarmCatalog.equipmentSlots.includes(slot))
+    .map(([slot, data]) => [slot, normalizeEquipmentSlot(slot, data)]));
 }
 
 function saveState() {

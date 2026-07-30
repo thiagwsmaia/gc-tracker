@@ -2427,6 +2427,24 @@ dialog footer { border-top: 1px solid var(--line); border-bottom: 0; }
   filter: grayscale(.25);
 }
 
+.equipment-item-icon.item-berkas {
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 35% 30%, #f5d170, #7f4bb0 50%, #2d1747 100%);
+  border: 3px solid rgba(222, 188, 91, .78);
+  box-shadow: 0 0 12px rgba(130, 76, 190, .28), inset 0 2px 8px rgba(255,255,255,.15);
+}
+
+.equipment-item-icon.item-berkas::after {
+  display: none;
+}
+
+.equipment-item-icon.item-berkas .equipment-empty-icon {
+  width: 36px;
+  height: 36px;
+  opacity: .9;
+}
+
 .slot-editor-main {
   min-width: 0;
   display: grid;
