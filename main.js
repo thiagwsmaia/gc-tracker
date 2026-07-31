@@ -1,7 +1,8 @@
 const { app, BrowserWindow, Menu, shell } = require("electron");
 const path = require("path");
 
-const appVersion = "20260727-desktop-electron";
+const appVersion = "20260731-app-icon-jin";
+const appIcon = path.join(__dirname, "assets", "icons", "gc-tracker-jin.ico");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -11,7 +12,7 @@ function createWindow() {
     minHeight: 720,
     title: "GC Tracker",
     backgroundColor: "#080d18",
-    icon: path.join(__dirname, "assets", "icons", "gc-tracker-jin.ico"),
+    icon: appIcon,
     autoHideMenuBar: true,
     show: false,
     webPreferences: {
@@ -44,6 +45,9 @@ function createWindow() {
 }
 
 app.setName("GC Tracker");
+if (process.platform === "win32") {
+  app.setAppUserModelId("local.gctracker.app");
+}
 Menu.setApplicationMenu(null);
 
 app.whenReady().then(createWindow);
