@@ -5,6 +5,7 @@
 - Padronização do ícone do app, favicon, marca lateral, janela Electron e atalho para o Jin.
 - Ajuste do atalho da área de trabalho para abrir sempre a versão atual do projeto via launcher.
 - Recorte e inclusão das imagens reais das peças do print do Jin.
+- Refinamento dos recortes das peças do Jin para evitar imagens cortadas e pedaços de slots vizinhos.
 - Slots preenchidos agora exibem foto do item com badge de fortificação no canto, aproximando a tela do estilo do GCFarm.
 - Validação visual confirmou 14 slots do Jin com imagens reais.
 

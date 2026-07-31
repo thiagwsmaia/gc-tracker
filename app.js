@@ -289,21 +289,22 @@ equipmentCatalog["Arma secundária"].push({
   secondaryRanges: {}
 });
 
+const equipmentIconCache = "20260731-jin-crops-v2";
 const equipmentIconSrcById = {
-  "void-observer-helm": "./assets/equipment-icons/jin-print/void-observer-helm.png",
-  "void-observer-cota": "./assets/equipment-icons/jin-print/void-observer-cota.png",
-  "void-observer-calca": "./assets/equipment-icons/jin-print/void-observer-calca.png",
-  "void-observer-luva": "./assets/equipment-icons/jin-print/void-observer-luva.png",
-  "void-observer-sapato": "./assets/equipment-icons/jin-print/void-observer-sapato.png",
-  "void-observer-capa": "./assets/equipment-icons/jin-print/void-observer-capa.png",
-  "void-observer-arma-principal": "./assets/equipment-icons/jin-print/void-observer-arma-principal.png",
-  "berkas-reserve-weapon": "./assets/equipment-icons/jin-print/berkas-reserve-weapon.png",
-  "void-observer-diadema": "./assets/equipment-icons/jin-print/void-observer-diadema.png",
-  "void-observer-mascara": "./assets/equipment-icons/jin-print/void-observer-mascara.png",
-  "void-observer-asas": "./assets/equipment-icons/jin-print/void-observer-asas.png",
-  "void-observer-facas": "./assets/equipment-icons/jin-print/void-observer-facas.png",
-  "void-observer-escudos": "./assets/equipment-icons/jin-print/void-observer-escudos.png",
-  "void-observer-brinco-ou-piercing-1": "./assets/equipment-icons/jin-print/void-observer-brinco-ou-piercing-1.png"
+  "void-observer-helm": `./assets/equipment-icons/jin-print/void-observer-helm.png?v=${equipmentIconCache}`,
+  "void-observer-cota": `./assets/equipment-icons/jin-print/void-observer-cota.png?v=${equipmentIconCache}`,
+  "void-observer-calca": `./assets/equipment-icons/jin-print/void-observer-calca.png?v=${equipmentIconCache}`,
+  "void-observer-luva": `./assets/equipment-icons/jin-print/void-observer-luva.png?v=${equipmentIconCache}`,
+  "void-observer-sapato": `./assets/equipment-icons/jin-print/void-observer-sapato.png?v=${equipmentIconCache}`,
+  "void-observer-capa": `./assets/equipment-icons/jin-print/void-observer-capa.png?v=${equipmentIconCache}`,
+  "void-observer-arma-principal": `./assets/equipment-icons/jin-print/void-observer-arma-principal.png?v=${equipmentIconCache}`,
+  "berkas-reserve-weapon": `./assets/equipment-icons/jin-print/berkas-reserve-weapon.png?v=${equipmentIconCache}`,
+  "void-observer-diadema": `./assets/equipment-icons/jin-print/void-observer-diadema.png?v=${equipmentIconCache}`,
+  "void-observer-mascara": `./assets/equipment-icons/jin-print/void-observer-mascara.png?v=${equipmentIconCache}`,
+  "void-observer-asas": `./assets/equipment-icons/jin-print/void-observer-asas.png?v=${equipmentIconCache}`,
+  "void-observer-facas": `./assets/equipment-icons/jin-print/void-observer-facas.png?v=${equipmentIconCache}`,
+  "void-observer-escudos": `./assets/equipment-icons/jin-print/void-observer-escudos.png?v=${equipmentIconCache}`,
+  "void-observer-brinco-ou-piercing-1": `./assets/equipment-icons/jin-print/void-observer-brinco-ou-piercing-1.png?v=${equipmentIconCache}`
 };
 
 Object.values(equipmentCatalog).flat().forEach(item => {
