@@ -289,6 +289,27 @@ equipmentCatalog["Arma secundária"].push({
   secondaryRanges: {}
 });
 
+const equipmentIconSrcById = {
+  "void-observer-helm": "./assets/equipment-icons/jin-print/void-observer-helm.png",
+  "void-observer-cota": "./assets/equipment-icons/jin-print/void-observer-cota.png",
+  "void-observer-calca": "./assets/equipment-icons/jin-print/void-observer-calca.png",
+  "void-observer-luva": "./assets/equipment-icons/jin-print/void-observer-luva.png",
+  "void-observer-sapato": "./assets/equipment-icons/jin-print/void-observer-sapato.png",
+  "void-observer-capa": "./assets/equipment-icons/jin-print/void-observer-capa.png",
+  "void-observer-arma-principal": "./assets/equipment-icons/jin-print/void-observer-arma-principal.png",
+  "berkas-reserve-weapon": "./assets/equipment-icons/jin-print/berkas-reserve-weapon.png",
+  "void-observer-diadema": "./assets/equipment-icons/jin-print/void-observer-diadema.png",
+  "void-observer-mascara": "./assets/equipment-icons/jin-print/void-observer-mascara.png",
+  "void-observer-asas": "./assets/equipment-icons/jin-print/void-observer-asas.png",
+  "void-observer-facas": "./assets/equipment-icons/jin-print/void-observer-facas.png",
+  "void-observer-escudos": "./assets/equipment-icons/jin-print/void-observer-escudos.png",
+  "void-observer-brinco-ou-piercing-1": "./assets/equipment-icons/jin-print/void-observer-brinco-ou-piercing-1.png"
+};
+
+Object.values(equipmentCatalog).flat().forEach(item => {
+  item.iconSrc = equipmentIconSrcById[item.id] || item.iconSrc || "";
+});
+
 function equipmentCatalogFallbackItem(slot) {
   const slug = slot
     .normalize("NFD")
@@ -955,12 +976,19 @@ function equipmentSlotButton(char, slot) {
   const item = equipmentItemById(slot, data.itemId);
   const summary = filled ? equipmentSlotSummary(data, item) : slot;
   const fullTitle = filled ? `${slot}: ${item?.name || data.name || data.kind || "preenchido"}${data.rarity ? ` (${data.rarity})` : ""}` : slot;
+  const hasRealImage = filled && item?.iconSrc;
+  const visibleLabel = hasRealImage ? equipmentSlotImageBadge(data) : summary;
   return `
-    <button class="equipment-slot ${filled ? "has-item" : ""}" title="${escapeHtml(fullTitle)}" onclick="openEquipmentSlot('${char.name}', '${slot}')">
+    <button class="equipment-slot ${filled ? "has-item" : ""} ${hasRealImage ? "has-real-image" : ""}" title="${escapeHtml(fullTitle)}" onclick="openEquipmentSlot('${char.name}', '${slot}')">
       ${filled ? equipmentItemIcon(item || { iconClass: "item-generic" }) : equipmentSlotPlaceholderIcon(slot)}
-      <small>${escapeHtml(summary)}</small>
+      <small>${escapeHtml(visibleLabel)}</small>
     </button>
   `;
+}
+
+function equipmentSlotImageBadge(data) {
+  const fort = Number(data.fortification || 0);
+  return fort > 0 ? `+${fort}` : "0";
 }
 
 function equipmentSlotSummary(data, item) {
@@ -1056,6 +1084,9 @@ function equipmentItemById(slot, id) {
 }
 
 function equipmentItemIcon(item) {
+  if (item?.iconSrc) {
+    return `<span class="equipment-item-icon item-image"><img src="${escapeHtml(item.iconSrc)}" alt=""></span>`;
+  }
   if (item?.slotIconClass) {
     return `<span class="equipment-item-icon ${item.iconClass || "item-slot"}"><span class="equipment-empty-icon ${item.slotIconClass}" aria-hidden="true"></span></span>`;
   }

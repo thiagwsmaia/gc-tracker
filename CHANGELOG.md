@@ -1,5 +1,11 @@
 # Histórico do projeto
 
+## 2026-07-31
+
+- Recorte e inclusão das imagens reais das peças do print do Jin.
+- Slots preenchidos agora exibem foto do item com badge de fortificação no canto, aproximando a tela do estilo do GCFarm.
+- Validação visual confirmou 14 slots do Jin com imagens reais.
+
 ## 2026-07-30
 
 - Registro do print do Jin como evidência confirmada.
