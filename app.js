@@ -289,7 +289,7 @@ equipmentCatalog["Arma secundária"].push({
   secondaryRanges: {}
 });
 
-const equipmentIconCache = "20260731-jin-crops-v2";
+const equipmentIconCache = "20260804-site-crops";
 const equipmentIconSrcById = {
   "void-observer-helm": `./assets/equipment-icons/jin-print/void-observer-helm.png?v=${equipmentIconCache}`,
   "void-observer-cota": `./assets/equipment-icons/jin-print/void-observer-cota.png?v=${equipmentIconCache}`,
@@ -938,11 +938,7 @@ function powerIndicatorChip(item) {
 }
 
 function characterOrderNames() {
-  const fallback = [...state.characters]
-    .sort((a, b) => a.order - b.order)
-    .map(char => char.name);
-  const saved = Array.isArray(state.characterOrder) ? state.characterOrder : [];
-  return [...saved.filter(name => fallback.includes(name)), ...fallback.filter(name => !saved.includes(name))];
+  return sharedCharacterOrderNames();
 }
 
 function characterOrderIndex(name) {
@@ -956,9 +952,32 @@ function moveCharacterCard(name, direction) {
   const targetIndex = index + direction;
   if (index < 0 || targetIndex < 0 || targetIndex >= order.length) return;
   [order[index], order[targetIndex]] = [order[targetIndex], order[index]];
-  state.characterOrder = order;
+  setSharedCharacterOrder(order);
   saveState();
   renderCharacters();
+}
+
+function sharedCharacterOrderNames(filter = () => true) {
+  const validNames = [...state.characters]
+    .filter(filter)
+    .sort((a, b) => a.order - b.order)
+    .map(char => char.name);
+  const saved = Array.isArray(state.voidOrder) && state.voidOrder.length
+    ? state.voidOrder
+    : Array.isArray(state.characterOrder) ? state.characterOrder : [];
+  return [...saved.filter(name => validNames.includes(name)), ...validNames.filter(name => !saved.includes(name))];
+}
+
+function setSharedCharacterOrder(order) {
+  const validNames = [...state.characters]
+    .sort((a, b) => a.order - b.order)
+    .map(char => char.name);
+  const nextOrder = [...order.filter(name => validNames.includes(name)), ...validNames.filter(name => !order.includes(name))];
+  state.voidOrder = nextOrder;
+  state.characterOrder = nextOrder;
+  state.dailyOrder = nextOrder;
+  state.titleOrder = nextOrder;
+  state.visualOrder = nextOrder.filter(name => state.visualSet[name]);
 }
 
 function equipmentCompletion(char) {
@@ -1172,7 +1191,7 @@ function moveDailyCharacter(name, direction) {
   const targetIndex = index + direction;
   if (index < 0 || targetIndex < 0 || targetIndex >= order.length) return;
   [order[index], order[targetIndex]] = [order[targetIndex], order[index]];
-  state.dailyOrder = order;
+  setSharedCharacterOrder(order);
   saveState();
   renderDaily();
   requestAnimationFrame(() => {
@@ -1186,11 +1205,7 @@ function moveDailyCharacter(name, direction) {
 }
 
 function dailyOrderNames() {
-  const validNames = [...state.characters]
-    .sort((a, b) => a.order - b.order)
-    .map(char => char.name);
-  const saved = Array.isArray(state.dailyOrder) ? state.dailyOrder : [];
-  return [...saved.filter(name => validNames.includes(name)), ...validNames.filter(name => !saved.includes(name))];
+  return sharedCharacterOrderNames();
 }
 
 function dailyOrderIndex(name) {
@@ -1362,11 +1377,7 @@ function renderVoids() {
 }
 
 function voidOrderNames() {
-  const validNames = [...state.characters]
-    .sort((a, b) => a.order - b.order)
-    .map(char => char.name);
-  const saved = Array.isArray(state.voidOrder) ? state.voidOrder : [];
-  return [...saved.filter(name => validNames.includes(name)), ...validNames.filter(name => !saved.includes(name))];
+  return sharedCharacterOrderNames();
 }
 
 function voidOrderIndex(name) {
@@ -1380,7 +1391,7 @@ function moveVoidCharacter(name, direction) {
   const targetIndex = index + direction;
   if (index < 0 || targetIndex < 0 || targetIndex >= order.length) return;
   [order[index], order[targetIndex]] = [order[targetIndex], order[index]];
-  state.voidOrder = order;
+  setSharedCharacterOrder(order);
   saveState();
   renderVoidsPreservingScroll();
 }
@@ -1625,7 +1636,7 @@ function moveTitleCharacter(name, direction) {
   const targetIndex = index + direction;
   if (index < 0 || targetIndex < 0 || targetIndex >= order.length) return;
   [order[index], order[targetIndex]] = [order[targetIndex], order[index]];
-  state.titleOrder = order;
+  setSharedCharacterOrder(order);
   saveState();
   renderTitles();
   requestAnimationFrame(() => {
@@ -1639,11 +1650,7 @@ function moveTitleCharacter(name, direction) {
 }
 
 function titleOrderNames() {
-  const validNames = [...state.characters]
-    .sort((a, b) => b.ta - a.ta || a.order - b.order)
-    .map(char => char.name);
-  const saved = Array.isArray(state.titleOrder) ? state.titleOrder : [];
-  return [...saved.filter(name => validNames.includes(name)), ...validNames.filter(name => !saved.includes(name))];
+  return sharedCharacterOrderNames();
 }
 
 function titleOrderIndex(name) {
@@ -1801,7 +1808,7 @@ function moveVisualCharacter(name, direction) {
   const targetIndex = index + direction;
   if (index < 0 || targetIndex < 0 || targetIndex >= order.length) return;
   [order[index], order[targetIndex]] = [order[targetIndex], order[index]];
-  state.visualOrder = order;
+  setSharedCharacterOrder(order);
   saveState();
   render();
   requestAnimationFrame(() => {
@@ -1815,12 +1822,7 @@ function moveVisualCharacter(name, direction) {
 }
 
 function visualOrderNames() {
-  const validNames = state.characters
-    .filter(char => state.visualSet[char.name])
-    .sort((a, b) => a.order - b.order)
-    .map(char => char.name);
-  const saved = Array.isArray(state.visualOrder) ? state.visualOrder : [];
-  return [...saved.filter(name => validNames.includes(name)), ...validNames.filter(name => !saved.includes(name))];
+  return sharedCharacterOrderNames(char => state.visualSet[char.name]);
 }
 
 function visualOrderIndex(name) {

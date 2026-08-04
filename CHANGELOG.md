@@ -1,5 +1,10 @@
 # Histórico do projeto
 
+## 2026-08-04
+
+- Ordem dos personagens passa a ser compartilhada entre Itens, Personagens, Rotina, Títulos e Visual, usando a sequência organizada em Itens como referência.
+- Recortes das roupas do set Void do Jin foram refeitos a partir do print mais limpo do GCFarm, mantendo as armas do print do jogo.
+
 ## 2026-08-03
 
 - Aba Itens preserva a posição do scroll ao clicar em Solene, Brinco/Piercing ou ajustar quantidades.
