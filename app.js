@@ -422,28 +422,28 @@ const powerIndicatorTargets = {
 
 const screenshotEquipmentFindings = {
   Jin: {
-    ta: 1192,
-    attack: 1192612,
+    ta: 1215,
+    attack: 1215379,
     power: {
-      attack: 41844,
-      specialAttack: 29572,
-      combinedAttack: 71416,
-      critDamage: 982.07,
-      critChance: 105.94
+      attack: 43237,
+      specialAttack: 28541,
+      combinedAttack: 71778,
+      critDamage: 1001.23,
+      critChance: 111.44
     },
     reviewStatus: "print-confirmed",
     source: {
-      nonVisual: "print 2026-07-30",
-      equipment: "print 2026-07-30"
+      nonVisual: "print 2026-08-04",
+      equipment: "print 2026-08-04"
     },
     accessories: {
       earrings: "legendary"
     },
-    titleStatus: titleStatusDefault(1192),
+    titleStatus: titleStatusDefault(1215),
     notes: [
-      "Print 2026-07-30: identificado como Jin.",
-      "Ataque Total lido no print: 1.192.612; marco de 1000 AT considerado completo.",
-      "Indicadores de poder do print: Ataque + Ataque Especial = 71.416; Dano Crítico 982,07%; Acerto Crítico 105,94%.",
+      "Print 2026-08-04: identificado como Jin.",
+      "Ataque Total lido no print: 1.215.379; marco de 1000 AT considerado completo.",
+      "Indicadores de poder do print: Ataque + Ataque Especial = 71.778; Dano Crítico 1001,23%; Acerto Crítico 111,44%.",
       "Set Void completo inferido pelos fundos vermelhos nos equipamentos.",
       "Arma secundária/reserva identificada como Berkas.",
       "Brinco marcado como lendário pelo fundo roxo."
@@ -453,12 +453,12 @@ const screenshotEquipmentFindings = {
       armor: "Void completo",
       ring: "Void",
       slots: {
-        "Elmo": printSlot("Elmo", "void-observer-helm", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
-        "Cota": printSlot("Cota", "void-observer-cota", "Ancestral", 10, "Void confirmado pelo fundo vermelho no print."),
-        "Calça": printSlot("Calça", "void-observer-calca", "Ancestral", 0, "Parte do set Void completo inferido pelo print."),
+        "Elmo": printSlot("Elmo", "void-observer-helm", "Ancestral", 16, "Void confirmado pelo fundo vermelho no print."),
+        "Cota": printSlot("Cota", "void-observer-cota", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Calça": printSlot("Calça", "void-observer-calca", "Ancestral", 10, "Void confirmado pelo fundo vermelho no print."),
         "Luva": printSlot("Luva", "void-observer-luva", "Ancestral", 18, "Void confirmado pelo fundo vermelho no print."),
-        "Sapato": printSlot("Sapato", "void-observer-sapato", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
-        "Capa": printSlot("Capa", "void-observer-capa", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Sapato": printSlot("Sapato", "void-observer-sapato", "Ancestral", 14, "Void confirmado pelo fundo vermelho no print."),
+        "Capa": printSlot("Capa", "void-observer-capa", "Ancestral", 16, "Void confirmado pelo fundo vermelho no print."),
         "Arma principal": printSlot("Arma principal", "void-observer-arma-principal", "Ancestral", 17, "Arma Void confirmada pelo fundo vermelho no print."),
         "Arma secundária": printSlot("Arma secundária", "berkas-reserve-weapon", "Lendário", 0, "Arma reserva de Berkas identificada no print."),
         "Diadema": printSlot("Diadema", "void-observer-diadema", "Ancestral", 9, "Parte do set Void completo inferido pelo print."),
