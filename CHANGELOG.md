@@ -2,6 +2,7 @@
 
 ## 2026-08-03
 
+- Aba Itens preserva a posição do scroll ao clicar em Solene, Brinco/Piercing ou ajustar quantidades.
 - Aba Itens agora permite digitar quantidades diretamente no campo central, mantendo os botões laterais para ajuste fino.
 - Brinco e Piercing foram unificados em uma única coluna de estágio para reduzir repetição na tabela.
 

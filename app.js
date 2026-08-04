@@ -1298,17 +1298,17 @@ function toggleDailyFlag(name, key) {
 function soleneBadges(char) {
   const value = char.daily.solene || "Nenhuma";
   const badges = soleneRingOptions.map(ring => `
-    <button class="solene-badge ${value === ring.id ? "is-selected" : ""}" onclick="setSolene('${char.name}', '${ring.id}')" title="${ring.label}" aria-label="${char.name}: ${ring.label}">
+    <button type="button" class="solene-badge ${value === ring.id ? "is-selected" : ""}" onclick="setSolene('${char.name}', '${ring.id}')" title="${ring.label}" aria-label="${char.name}: ${ring.label}">
       <img src="${ring.icon}" alt="${ring.label}" onerror="this.style.display='none'">
     </button>
   `).join("");
-  return `<div class="solene-box">${badges}<button class="solene-none" onclick="setSolene('${char.name}', 'Nenhuma')">${value}</button></div>`;
+  return `<div class="solene-box">${badges}<button type="button" class="solene-none" onclick="setSolene('${char.name}', 'Nenhuma')">${value}</button></div>`;
 }
 
 function setSolene(name, value) {
   findChar(name).daily.solene = value;
   saveState();
-  render();
+  renderVoidsPreservingScroll();
 }
 
 function missionProgress(char) {
@@ -1375,9 +1375,6 @@ function voidOrderIndex(name) {
 }
 
 function moveVoidCharacter(name, direction) {
-  const pageScroll = window.scrollY;
-  const materialScroll = document.querySelector("#voids .void-material-scroll");
-  const tableScroll = materialScroll ? { top: materialScroll.scrollTop, left: materialScroll.scrollLeft } : { top: 0, left: 0 };
   const order = voidOrderNames();
   const index = order.indexOf(name);
   const targetIndex = index + direction;
@@ -1385,6 +1382,13 @@ function moveVoidCharacter(name, direction) {
   [order[index], order[targetIndex]] = [order[targetIndex], order[index]];
   state.voidOrder = order;
   saveState();
+  renderVoidsPreservingScroll();
+}
+
+function renderVoidsPreservingScroll() {
+  const pageScroll = window.scrollY;
+  const materialScroll = document.querySelector("#voids .void-material-scroll");
+  const tableScroll = materialScroll ? { top: materialScroll.scrollTop, left: materialScroll.scrollLeft } : { top: 0, left: 0 };
   renderVoids();
   requestAnimationFrame(() => {
     window.scrollTo(0, pageScroll);
@@ -1420,7 +1424,7 @@ function setAccessoryStage(name, key, stage) {
     char.accessories = { ...(char.accessories || {}), [key]: current === stage ? "" : stage };
   }
   saveState();
-  renderVoids();
+  renderVoidsPreservingScroll();
 }
 
 function voidMaterialStepper(char, key, label) {
@@ -1441,7 +1445,7 @@ function setVoidMaterial(name, key, value) {
   if (key === "voidOrange") char.voids.invasao = amount;
   if (key === "voidBlue") char.voids.pesadelo = amount;
   saveState();
-  render();
+  renderVoidsPreservingScroll();
 }
 
 function stepVoidMaterial(name, key, delta) {
@@ -1459,7 +1463,7 @@ function commitVoidMaterialInput(event, name, key) {
 function setVoidMaterialFromInput(name, key, raw) {
   const value = Number(String(raw).replace(/\./g, "").replace(",", "."));
   if (!Number.isFinite(value)) {
-    renderVoids();
+    renderVoidsPreservingScroll();
     return;
   }
   setVoidMaterial(name, key, value);
