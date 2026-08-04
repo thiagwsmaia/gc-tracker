@@ -289,7 +289,30 @@ equipmentCatalog["Arma secundária"].push({
   secondaryRanges: {}
 });
 
-const equipmentIconCache = "20260804-site-crops";
+[
+  ["Elmo", "lupus-void-helm", "Elmo Void do Lupus"],
+  ["Cota", "lupus-void-cota", "Cota Void do Lupus"],
+  ["Calça", "lupus-void-calca", "Calça Void do Lupus"],
+  ["Luva", "lupus-void-luva", "Luva Void do Lupus"],
+  ["Sapato", "lupus-void-sapato", "Sapato Void do Lupus"],
+  ["Capa", "lupus-void-capa", "Capa Void do Lupus"],
+  ["Arma principal", "lupus-void-arma-principal", "Arma Void do Lupus"]
+].forEach(([slot, id, name]) => {
+  if ((equipmentCatalog[slot] || []).some(item => item.id === id)) return;
+  equipmentCatalog[slot].push({
+    id,
+    name,
+    type: slot.toLowerCase(),
+    level: 85,
+    rarity: "Ancestral",
+    iconClass: "item-void-observer",
+    mainAttributes: [equipmentMainAttributeBySlot[slot] || "Atributo principal pendente"],
+    secondaryLimit: 5,
+    secondaryRanges: equipmentCatalog[slot][0]?.secondaryRanges || {}
+  });
+});
+
+const equipmentIconCache = "20260804-lupus-print";
 const equipmentIconSrcById = {
   "void-observer-helm": `./assets/equipment-icons/jin-print/void-observer-helm.png?v=${equipmentIconCache}`,
   "void-observer-cota": `./assets/equipment-icons/jin-print/void-observer-cota.png?v=${equipmentIconCache}`,
@@ -304,7 +327,14 @@ const equipmentIconSrcById = {
   "void-observer-asas": `./assets/equipment-icons/jin-print/void-observer-asas.png?v=${equipmentIconCache}`,
   "void-observer-facas": `./assets/equipment-icons/jin-print/void-observer-facas.png?v=${equipmentIconCache}`,
   "void-observer-escudos": `./assets/equipment-icons/jin-print/void-observer-escudos.png?v=${equipmentIconCache}`,
-  "void-observer-brinco-ou-piercing-1": `./assets/equipment-icons/jin-print/void-observer-brinco-ou-piercing-1.png?v=${equipmentIconCache}`
+  "void-observer-brinco-ou-piercing-1": `./assets/equipment-icons/jin-print/void-observer-brinco-ou-piercing-1.png?v=${equipmentIconCache}`,
+  "lupus-void-helm": `./assets/equipment-icons/lupus-print/lupus-void-helm.png?v=${equipmentIconCache}`,
+  "lupus-void-cota": `./assets/equipment-icons/lupus-print/lupus-void-cota.png?v=${equipmentIconCache}`,
+  "lupus-void-calca": `./assets/equipment-icons/lupus-print/lupus-void-calca.png?v=${equipmentIconCache}`,
+  "lupus-void-luva": `./assets/equipment-icons/lupus-print/lupus-void-luva.png?v=${equipmentIconCache}`,
+  "lupus-void-sapato": `./assets/equipment-icons/lupus-print/lupus-void-sapato.png?v=${equipmentIconCache}`,
+  "lupus-void-capa": `./assets/equipment-icons/lupus-print/lupus-void-capa.png?v=${equipmentIconCache}`,
+  "lupus-void-arma-principal": `./assets/equipment-icons/lupus-print/lupus-void-arma-principal.png?v=${equipmentIconCache}`
 };
 
 Object.values(equipmentCatalog).flat().forEach(item => {
@@ -437,6 +467,44 @@ const screenshotEquipmentFindings = {
         "Facas": printSlot("Facas", "void-observer-facas", "Ancestral", 0, "Parte do set Void completo inferido pelo print."),
         "Escudos": printSlot("Escudos", "void-observer-escudos", "Ancestral", 0, "Parte do set Void completo inferido pelo print."),
         "Brinco ou piercing 1": printSlot("Brinco ou piercing 1", "void-observer-brinco-ou-piercing-1", "Lendário", 0, "Brinco lendário pelo fundo roxo no print.")
+      }
+    }
+  },
+  Lupus: {
+    ta: 828,
+    attack: 828005,
+    power: {
+      attack: 35027,
+      specialAttack: 19222,
+      combinedAttack: 54249,
+      critDamage: 787.90,
+      critChance: 102.34
+    },
+    reviewStatus: "print-confirmed",
+    source: {
+      nonVisual: "print 2026-08-04",
+      equipment: "print 2026-08-04"
+    },
+    titleStatus: titleStatusDefault(828),
+    notes: [
+      "Print 2026-08-04: identificado como Lupus.",
+      "Ataque Total lido no print: 828.005; marco de 800 AT considerado completo.",
+      "Indicadores de poder do print: Ataque + Ataque Especial = 54.249; Dano Crítico 787,90%; Acerto Crítico 102,34%.",
+      "Peças Void visíveis registradas a partir dos fundos vermelhos no print.",
+      "Arma principal Void visível no print com fortificação +17."
+    ].join("\n"),
+    equipment: {
+      weapon: "Void parcial visível",
+      armor: "Void visível",
+      ring: "Acessórios pendentes de confirmação",
+      slots: {
+        "Elmo": printSlot("Elmo", "lupus-void-helm", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Cota": printSlot("Cota", "lupus-void-cota", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Calça": printSlot("Calça", "lupus-void-calca", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Luva": printSlot("Luva", "lupus-void-luva", "Ancestral", 17, "Void confirmado pelo fundo vermelho no print."),
+        "Sapato": printSlot("Sapato", "lupus-void-sapato", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Capa": printSlot("Capa", "lupus-void-capa", "Ancestral", 9, "Void confirmado pelo fundo vermelho no print."),
+        "Arma principal": printSlot("Arma principal", "lupus-void-arma-principal", "Ancestral", 17, "Arma Void confirmada pelo fundo vermelho no print.")
       }
     }
   }

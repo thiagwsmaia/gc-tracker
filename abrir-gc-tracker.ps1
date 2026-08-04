@@ -9,7 +9,7 @@ if (Test-Path $Electron) {
 }
 
 $Port = 4177
-$Url = "http://127.0.0.1:$Port/?v=20260804-shared-order-icons"
+$Url = "http://127.0.0.1:$Port/?v=20260804-lupus-print"
 
 $server = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
 if (-not $server) {
