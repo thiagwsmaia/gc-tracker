@@ -1,5 +1,10 @@
 # Histórico do projeto
 
+## 2026-08-03
+
+- Aba Itens agora permite digitar quantidades diretamente no campo central, mantendo os botões laterais para ajuste fino.
+- Brinco e Piercing foram unificados em uma única coluna de estágio para reduzir repetição na tabela.
+
 ## 2026-07-31
 
 - Padronização do ícone do app, favicon, marca lateral, janela Electron e atalho para o Jin.

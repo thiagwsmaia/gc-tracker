@@ -1334,8 +1334,7 @@ function renderVoids() {
               <th>Personagem</th>
               ${voidMaterialItems.map(([, label, icon]) => `<th><img src="${icon}" alt="${label}"><span>${label}</span></th>`).join("")}
               <th><img src="${gcFarmMissionIcons.solene}" alt="Solene"><span>Solene</span></th>
-              <th><span>Brincos</span></th>
-              <th><span>Piercing</span></th>
+              <th><span>Brinco/Piercing</span></th>
             </tr>
           </thead>
           <tbody>
@@ -1352,8 +1351,7 @@ function renderVoids() {
                 </td>
                 ${voidMaterialItems.map(([key, label]) => `<td>${voidMaterialStepper(char, key, label)}</td>`).join("")}
                 <td class="void-solene-cell">${soleneBadges(char)}</td>
-                <td>${accessoryStageSelector(char, "earrings", "Brincos")}</td>
-                <td>${accessoryStageSelector(char, "piercing", "Piercing")}</td>
+                <td>${accessoryStageSelector(char, "earringsPiercing", "Brinco/Piercing")}</td>
               </tr>
             `).join("")}
           </tbody>
@@ -1399,7 +1397,9 @@ function moveVoidCharacter(name, direction) {
 }
 
 function accessoryStageSelector(char, key, label) {
-  const value = char.accessories?.[key] || "";
+  const value = key === "earringsPiercing"
+    ? (char.accessories?.earrings || char.accessories?.piercing || "")
+    : (char.accessories?.[key] || "");
   return `
     <div class="accessory-stage" aria-label="${label} de ${char.name}">
       ${accessoryStages.map(([stage, stageLabel]) => `
@@ -1411,8 +1411,14 @@ function accessoryStageSelector(char, key, label) {
 
 function setAccessoryStage(name, key, stage) {
   const char = findChar(name);
-  const current = char.accessories?.[key] || "";
-  char.accessories = { ...(char.accessories || {}), [key]: current === stage ? "" : stage };
+  if (key === "earringsPiercing") {
+    const current = char.accessories?.earrings || char.accessories?.piercing || "";
+    const next = current === stage ? "" : stage;
+    char.accessories = { ...(char.accessories || {}), earrings: next, piercing: next };
+  } else {
+    const current = char.accessories?.[key] || "";
+    char.accessories = { ...(char.accessories || {}), [key]: current === stage ? "" : stage };
+  }
   saveState();
   renderVoids();
 }
@@ -1422,7 +1428,7 @@ function voidMaterialStepper(char, key, label) {
   return `
     <div class="void-material-stepper" aria-label="${char.name}: ${label}">
       <button type="button" title="Diminuir ${label}" onclick="stepVoidMaterial('${char.name}', '${key}', -1)">‹</button>
-      <button type="button" class="void-material-value" title="Editar ${label}" onclick="editVoidMaterial('${char.name}', '${key}', '${label}')">${value.toLocaleString("pt-BR")}</button>
+      <input class="void-material-value" type="text" inputmode="numeric" value="${value.toLocaleString("pt-BR")}" title="Editar ${label}" aria-label="${label} de ${char.name}" onfocus="this.select()" onkeydown="commitVoidMaterialInput(event, '${char.name}', '${key}')" onblur="setVoidMaterialFromInput('${char.name}', '${key}', this.value)">
       <button type="button" title="Aumentar ${label}" onclick="stepVoidMaterial('${char.name}', '${key}', 1)">›</button>
     </div>
   `;
@@ -1442,6 +1448,21 @@ function stepVoidMaterial(name, key, delta) {
   const char = findChar(name);
   const current = Number(char.materials?.[key] || 0);
   setVoidMaterial(name, key, current + delta);
+}
+
+function commitVoidMaterialInput(event, name, key) {
+  if (event.key !== "Enter") return;
+  event.preventDefault();
+  setVoidMaterialFromInput(name, key, event.currentTarget.value);
+}
+
+function setVoidMaterialFromInput(name, key, raw) {
+  const value = Number(String(raw).replace(/\./g, "").replace(",", "."));
+  if (!Number.isFinite(value)) {
+    renderVoids();
+    return;
+  }
+  setVoidMaterial(name, key, value);
 }
 
 function editVoidMaterial(name, key, label) {

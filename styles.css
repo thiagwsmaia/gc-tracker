@@ -1349,7 +1349,8 @@ th {
   box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
 }
 
-.void-material-stepper button {
+.void-material-stepper button,
+.void-material-stepper input {
   min-height: 38px;
   height: 38px;
   padding: 0;
@@ -1362,8 +1363,16 @@ th {
   line-height: 1;
 }
 
+.void-material-stepper input {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  outline: none;
+}
+
 .void-material-stepper button:hover,
-.void-material-stepper button:focus-visible {
+.void-material-stepper button:focus-visible,
+.void-material-stepper input:focus-visible {
   background: #223052;
   color: #ffffff;
 }
