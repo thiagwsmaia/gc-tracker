@@ -2,6 +2,7 @@
 
 ## 2026-08-04
 
+- Registro do print do Zero com Ataque Total, indicadores de poder e peças visíveis sem cadeado.
 - Atualização do Jin com novo Ataque Total, indicadores de poder e fortificações visíveis no print mais recente.
 - Registro do print do Lupus com Ataque Total, indicadores de poder e peças Void visíveis.
 - Inclusão dos recortes dos equipamentos visíveis do Lupus na tela de Personagens.
