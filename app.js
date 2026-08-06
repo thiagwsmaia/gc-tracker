@@ -90,36 +90,29 @@ const visualSetSlots = ["Elmo", "Cota", "Calça", "Luvas", "Sapatos", "Capa", "A
 const visualSetOptions = ["Nenhum", "SEASON 4", "SEASON 5", "SEASON 6", "SEASON 7", "SEASON 8", "SEASON 9", "SEASON 10"];
 const visualAccuracyPerPiece = 3;
 const visualSetRules = {
-  Elmo: { ideal: ["SEASON 10"], alt: [], hint: "acerto" },
-  Cota: { ideal: ["SEASON 9", "SEASON 4"], alt: [], hint: "acerto" },
-  "Calça": { ideal: ["SEASON 8"], alt: ["SEASON 5"], hint: "all stat + mp rec / dano critico" },
-  Luvas: { ideal: ["SEASON 10", "SEASON 8"], alt: [], hint: "acerto" },
-  Sapatos: { ideal: ["SEASON 7", "SEASON 9"], alt: ["SEASON 8", "SEASON 5", "SEASON 6", "SEASON 10"], hint: "mp rec + all stat / dano critico" },
-  Capa: { ideal: ["SEASON 7", "SEASON 6", "SEASON 8"], alt: [], hint: "atk + crit chance" },
-  Arma: { ideal: ["SEASON 7"], alt: [], hint: "all stat + crit chance" },
-  Diadema: { ideal: ["SEASON 10"], alt: [], hint: "acerto" },
-  Mascara: { ideal: ["SEASON 9", "SEASON 8"], alt: [], hint: "acerto" },
-  Asas: { ideal: ["SEASON 7", "SEASON 9"], alt: ["SEASON 10", "SEASON 6"], hint: "mp rec + crit dmg / mp rec" },
-  Facas: { ideal: ["SEASON 6"], alt: [], hint: "crit chance + special atk" },
-  Escudo: { ideal: ["SEASON 10", "SEASON 5"], alt: [], hint: "acerto" }
+  Elmo: { ideal: ["SEASON 5"], alt: [], hint: "acerto perfeito" },
+  Cota: { ideal: ["SEASON 9"], alt: [], hint: "acerto perfeito" },
+  "Calça": { ideal: ["SEASON 8"], alt: [], hint: "acerto perfeito" },
+  Luvas: { ideal: ["SEASON 8"], alt: [], hint: "acerto perfeito" },
+  Sapatos: { ideal: ["SEASON 8"], alt: [], hint: "acerto perfeito" },
+  Capa: { ideal: ["SEASON 8"], alt: [], hint: "acerto perfeito" },
+  Arma: { ideal: ["SEASON 7"], alt: [], hint: "acerto perfeito" },
+  Diadema: { ideal: ["SEASON 9"], alt: [], hint: "acerto perfeito" },
+  Mascara: { ideal: ["SEASON 9"], alt: [], hint: "acerto perfeito" },
+  Asas: { ideal: ["SEASON 9"], alt: [], hint: "acerto perfeito" },
+  Facas: { ideal: ["SEASON 6"], alt: [], hint: "acerto perfeito" },
+  Escudo: { ideal: ["SEASON 5"], alt: [], hint: "acerto perfeito" }
 };
 const visualSetBuilds = [
   {
     title: "Build de Acerto Crítico",
-    tag: "referência GCFarm",
+    tag: "perfeita",
     notes: [
-      ["Set Season 10", "4 peças", "Elmo, Diadema, Escudo e Luva/Asas"],
-      ["Set Season 8", "4 peças", "Luva, Calça, Sapato, Capa ou Máscara"],
-      ["Elmo", "Season 10", "acerto"],
-      ["Diadema", "Season 10", "acerto"],
-      ["Escudo", "Season 10/5", "acerto"],
-      ["Luvas", "Season 10/8", "acerto"],
-      ["Mascara", "Season 9/8", "acerto"],
-      ["Cota", "Season 9/4", "acerto"],
-      ["Sapatos", "Season 7/9", "peça restante boa"],
-      ["Capa", "Season 7/6/8", "peça restante boa"],
-      ["Arma", "Season 7", "peça restante boa"],
-      ["Facas", "Season 6", "peça restante boa"]
+      ["Season 8", "4 peças", "Calça, bota, capa e luva"],
+      ["Season 5", "2 peças", "Escudo e elmo"],
+      ["Season 7", "1 peça", "Arma"],
+      ["Season 9", "4 peças", "Diadema, rosto, cota e asa"],
+      ["Season 6", "1 peça", "Faca"]
     ]
   },
   {

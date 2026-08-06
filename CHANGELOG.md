@@ -1,5 +1,9 @@
 # Histórico do projeto
 
+## 2026-08-06
+
+- Build perfeita de acerto crítico atualizada na aba Visual: Season 8 em calça/bota/capa/luva, Season 5 em escudo/elmo, Season 7 na arma, Season 9 em diadema/rosto/cota/asa e Season 6 na faca.
+
 ## 2026-08-04
 
 - App desktop passa a recarregar automaticamente quando arquivos do projeto mudam, evitando fechar e abrir para ver alterações.
