@@ -681,6 +681,7 @@ function loadState() {
 
 function migrateState(saved) {
   const migrated = { ...structuredClone(seed), ...saved };
+  migrated.migrations = { ...(saved.migrations || {}) };
   const savedByName = new Map((saved.characters || []).map(char => [char.name, char]));
   migrated.characters = seed.characters.map(base => {
     const old = savedByName.get(base.name);
@@ -740,10 +741,24 @@ function migrateState(saved) {
     .sort((a, b) => a.order - b.order)
     .map(char => char.name);
   if (!migrated.visualOrder.length) migrated.visualOrder = seed.visualOrder;
+  if (!migrated.migrations.missingVisualS9AndElmoS5) {
+    applyMissingVisualInventoryCorrection(migrated);
+    migrated.migrations.missingVisualS9AndElmoS5 = true;
+  }
   migrated.account = { ...seed.account, ...(saved.account || {}) };
   migrated.dataPolicy = seed.dataPolicy;
   applyScreenshotFindings(migrated);
   return migrated;
+}
+
+function applyMissingVisualInventoryCorrection(targetState) {
+  Object.values(targetState.visualSet || {}).forEach(row => {
+    if (!row) return;
+    if (row.Elmo === "SEASON 5") row.Elmo = "Nenhum";
+    visualSetSlots.forEach(slot => {
+      if (row[slot] === "SEASON 9") row[slot] = "Nenhum";
+    });
+  });
 }
 
 function applyScreenshotFindings(targetState) {

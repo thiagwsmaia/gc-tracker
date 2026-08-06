@@ -3,6 +3,7 @@
 ## 2026-08-06
 
 - Build perfeita de acerto crítico atualizada na aba Visual: Season 8 em calça/bota/capa/luva, Season 5 em escudo/elmo, Season 7 na arma, Season 9 em diadema/rosto/cota/asa e Season 6 na faca.
+- Inventário visual salvo passa por uma correção única removendo Elmo Season 5 e peças Season 9 que vieram do snapshot antigo, conforme estado atual da conta.
 
 ## 2026-08-04
 
