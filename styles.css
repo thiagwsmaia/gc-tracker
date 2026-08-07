@@ -1592,17 +1592,36 @@ th {
 
 .title-tower-head,
 .title-railway-head,
-.title-xp-head {
-  width: 120px;
-  min-width: 120px;
+.title-xp-head,
+.title-rune-head {
+  width: 76px;
+  min-width: 76px;
   background: #214066;
   color: #ffffff;
   font-size: 11px;
 }
 
+.title-railway-head,
+.title-xp-head {
+  line-height: 1.15;
+}
+
+.title-tower-head {
+  width: 120px;
+  min-width: 120px;
+}
+
 .title-tower-head img {
   width: 92px;
   height: 54px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.title-rune-head img {
+  width: 62px;
+  height: 42px;
   object-fit: contain;
   display: block;
   margin: 0 auto;
@@ -1628,18 +1647,26 @@ th {
 
 .title-tower-cell,
 .title-railway-cell,
-.title-xp-cell {
+.title-xp-cell,
+.title-rune-cell {
+  width: 76px;
+  min-width: 76px;
+  padding: 7px;
+}
+
+.title-tower-cell {
   width: 120px;
   min-width: 120px;
-  padding: 7px;
 }
 
 .title-tower-cell.is-ready,
 .title-railway-cell.is-done,
-.title-xp-cell.is-done { background: #91c37b; }
+.title-xp-cell.is-done,
+.title-rune-cell.is-done { background: #91c37b; }
 .title-tower-cell.is-low,
 .title-railway-cell.is-missing,
-.title-xp-cell.is-missing { background: #df6267; }
+.title-xp-cell.is-missing,
+.title-rune-cell.is-missing { background: #df6267; }
 
 .tower-floor-control {
   display: grid;
@@ -1667,7 +1694,8 @@ th {
 
 .tower-floor-control button,
 .title-railway-cell button,
-.title-xp-cell button {
+.title-xp-cell button,
+.title-rune-cell button {
   min-height: 34px;
   padding: 0;
   border-radius: 999px;
@@ -1685,7 +1713,8 @@ th {
 
 .title-tower-cell.is-ready .tower-floor-control button,
 .title-railway-cell.is-done button,
-.title-xp-cell.is-done button {
+.title-xp-cell.is-done button,
+.title-rune-cell.is-done button {
   background: linear-gradient(180deg, #1f6d3f, #154829);
   border-color: rgba(158,255,190,.75);
   color: #d9ffe4;
@@ -1693,17 +1722,17 @@ th {
 }
 
 .title-railway-cell button,
-.title-xp-cell button {
+.title-xp-cell button,
+.title-rune-cell button {
   width: 100%;
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  align-items: center;
-  gap: 5px;
-  padding: 0 10px;
+  place-items: center;
+  padding: 0;
 }
 
 .title-railway-cell button span,
-.title-xp-cell button span {
+.title-xp-cell button span,
+.title-rune-cell button span {
   width: 22px;
   height: 22px;
   display: grid;
@@ -1711,16 +1740,6 @@ th {
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.32);
   background: rgba(0,0,0,.18);
-}
-
-.title-railway-cell button small,
-.title-xp-cell button small {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: inherit;
-  font-weight: 900;
-  font-size: 10px;
 }
 
 .title-progress-cell {

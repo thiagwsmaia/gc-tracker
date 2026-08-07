@@ -6,6 +6,7 @@
 - Aba Títulos substitui os marcos 100-1000 por andar da Torre das Ilusões, check automático no andar 30 e check de Visual Ferroviário.
 - Aba Títulos ganhou check por personagem para marcar quem tem set de XP.
 - Aba Títulos foi renomeada visualmente para XP.
+- Aba XP compactou os checks de Visual Ferroviário e Set XP e ganhou check de Runa XP.
 
 ## 2026-08-06
 

@@ -427,6 +427,7 @@ const soleneRingOptions = [
 ];
 
 const illusionTowerIcon = "./assets/title-icons/torre-das-ilusoes.png";
+const xpRuneIcon = "./assets/title-icons/runa-xp.png";
 const titleBoardItems = [
   { id: "void-1-title", name: "Título do Void 1", category: "Vazio", icon: "./assets/title-icons/void-1-real.png" },
   { id: "harrier-1-title", name: "Harrier I", category: "Harrier", icon: "./assets/title-icons/harrier-real-1-v8.png" },
@@ -642,7 +643,7 @@ const seed = {
     titles: { done: titles, total: titleBoardItems.length },
     titleBoard: Object.fromEntries(titleBoardItems.map((item, index) => [item.id, index < titles])),
     titleStatus: titleStatusDefault(ta),
-    titleExtras: { towerFloor: ["Lupus", "Lin", "Edel"].includes(name) ? 22 : 30, railwayVisual: false, hasXpSet: false },
+    titleExtras: { towerFloor: ["Lupus", "Lin", "Edel"].includes(name) ? 22 : 30, railwayVisual: false, hasXpSet: false, xpRune: false },
     visual: { missing: missingVisual, total: 15 },
     source: {
       visual: "planilha",
@@ -1649,7 +1650,7 @@ function renderTitles() {
       <div class="title-board-toolbar">
         <div>
           <h2>XP dos Personagens</h2>
-          <p class="muted">Andar da Torre, visual ferroviário, set de XP e acompanhamento dos títulos por personagem.</p>
+          <p class="muted">Andar da Torre, visual ferroviário, set de XP, runa XP e acompanhamento dos títulos por personagem.</p>
         </div>
         <div class="title-board-legend">
           <span><i class="title-dot title-done"></i>feito</span>
@@ -1663,7 +1664,7 @@ function renderTitles() {
           <thead>
             <tr>
               <th class="title-date-head" colspan="2">Data: 26 julho.</th>
-              <th class="title-group-head" colspan="3">Progresso</th>
+              <th class="title-group-head" colspan="4">Progresso</th>
               ${groups.map(group => `<th class="title-group-head" colspan="${group.items.length}">${group.category}</th>`).join("")}
             </tr>
             <tr>
@@ -1674,6 +1675,9 @@ function renderTitles() {
               </th>
               <th class="title-railway-head">Visual ferroviário</th>
               <th class="title-xp-head">Set XP</th>
+              <th class="title-rune-head" title="Runa XP">
+                <img src="${xpRuneIcon}" alt="Runa XP">
+              </th>
               ${titleBoardItems.map(item => `
                 <th class="title-icon-head" title="${item.category}: ${item.name}">
                   <img src="${item.icon}" alt="${item.name}" onerror="this.style.display='none'">
@@ -1717,6 +1721,7 @@ function titleBoardRow(char) {
       ${titleTowerCell(char)}
       ${titleRailwayCell(char)}
       ${titleXpSetCell(char)}
+      ${titleXpRuneCell(char)}
       ${titleBoardItems.map(item => titleProgressCell(char, item)).join("")}
     </tr>
   `;
@@ -1741,7 +1746,6 @@ function titleRailwayCell(char) {
     <td class="title-railway-cell ${done ? "is-done" : "is-missing"}" title="${char.name}: Visual ferroviário">
       <button type="button" aria-label="${char.name}: Visual ferroviário" onclick="toggleRailwayVisual('${char.name}')">
         <span>${done ? "✓" : ""}</span>
-        <small>Ferroviário</small>
       </button>
     </td>
   `;
@@ -1753,7 +1757,17 @@ function titleXpSetCell(char) {
     <td class="title-xp-cell ${done ? "is-done" : "is-missing"}" title="${char.name}: tem set de XP">
       <button type="button" aria-label="${char.name}: tem set de XP" onclick="toggleXpSet('${char.name}')">
         <span>${done ? "✓" : ""}</span>
-        <small>Tem XP</small>
+      </button>
+    </td>
+  `;
+}
+
+function titleXpRuneCell(char) {
+  const done = Boolean(char.titleExtras?.xpRune);
+  return `
+    <td class="title-rune-cell ${done ? "is-done" : "is-missing"}" title="${char.name}: Runa XP">
+      <button type="button" aria-label="${char.name}: Runa XP" onclick="toggleXpRune('${char.name}')">
+        <span>${done ? "✓" : ""}</span>
       </button>
     </td>
   `;
@@ -1826,6 +1840,13 @@ function toggleXpSet(name) {
   const current = Boolean(char.titleExtras?.hasXpSet ?? char.titleExtras?.noXpSet);
   char.titleExtras = { ...(char.titleExtras || {}), hasXpSet: !current };
   delete char.titleExtras.noXpSet;
+  saveState();
+  rerenderTitlesKeepingScroll();
+}
+
+function toggleXpRune(name) {
+  const char = findChar(name);
+  char.titleExtras = { ...(char.titleExtras || {}), xpRune: !char.titleExtras?.xpRune };
   saveState();
   rerenderTitlesKeepingScroll();
 }
