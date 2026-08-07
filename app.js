@@ -119,17 +119,11 @@ const visualSetBuilds = [
     title: "Build de Dano Crítico",
     tag: "prints do jogo",
     notes: [
-      ["Pacote 8ª Temporada", "4 peças", "Dano crítico +6,00% + Resistência à contaminação +2,50%"],
-      ["8ª Temporada", "Escudo", "Dano crítico +3,00%; print do Mordomo Real"],
-      ["8ª Temporada", "Elmo/Luvas/Sapatos", "peças para fechar o pacote 8"],
-      ["Pacote 9ª Temporada", "4 peças", "Ataque +300 + Resistência à contaminação +2,50%"],
-      ["9ª Temporada", "Asas", "Dano crítico +3,00% + MP recuperado +4,00%"],
-      ["9ª Temporada", "Cota/Diadema/Facas/Arma", "peças para fechar o pacote 9"],
-      ["Pacote 10ª Temporada", "4 peças", "Acerto crítico +2,00% + Resistência à contaminação +2,50%"],
-      ["10ª Temporada", "Capa", "Dano crítico +3,00% + MP recuperado +4,00%"],
-      ["10ª Temporada", "Máscara", "peça destacada no print"],
-      ["5ª Temporada", "Calça", "entra para completar a build de dano"],
-      ["7ª Temporada", "Asa", "entra para completar a build de dano"],
+      ["8ª Temporada", "4 peças", "Escudo, elmo, luvas e sapatos. Fecha o bônus de 4 peças e inclui o escudo de dano crítico."],
+      ["9ª Temporada", "4 peças", "Cota, diadema, facas e arma. Fecha o bônus de 4 peças do pacote 9."],
+      ["10ª Temporada", "2 peças", "Capa e máscara. A capa entra pelo dano crítico e MP recuperado."],
+      ["5ª Temporada", "1 peça", "Calça."],
+      ["7ª Temporada", "1 peça", "Asa."],
       ["Bônus 12 peças", "8ª/9ª/10ª + extras", "Dano crítico +10,00%"]
     ]
   }
@@ -2024,6 +2018,9 @@ function visualSetMetaScore(row) {
 }
 
 function cycleVisualSet(name, slot) {
+  const pageScroll = window.scrollY;
+  const visualScroll = document.querySelector("#visualSet .visual-scroll");
+  const tableScroll = visualScroll ? { top: visualScroll.scrollTop, left: visualScroll.scrollLeft } : { top: 0, left: 0 };
   const row = state.visualSet[name] || {};
   const options = slot === "Pet" ? ["Não", "Sim"] : visualSetOptions;
   const current = row[slot] || options[0];
@@ -2031,6 +2028,14 @@ function cycleVisualSet(name, slot) {
   state.visualSet[name] = { ...row, [slot]: next };
   saveState();
   render();
+  requestAnimationFrame(() => {
+    window.scrollTo(0, pageScroll);
+    const nextVisualScroll = document.querySelector("#visualSet .visual-scroll");
+    if (nextVisualScroll) {
+      nextVisualScroll.scrollTop = tableScroll.top;
+      nextVisualScroll.scrollLeft = tableScroll.left;
+    }
+  });
 }
 
 function moveVisualCharacter(name, direction) {

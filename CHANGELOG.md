@@ -7,6 +7,7 @@
 - Aba Títulos ganhou check por personagem para marcar quem tem set de XP.
 - Aba Títulos foi renomeada visualmente para XP.
 - Aba XP compactou os checks de Visual Ferroviário e Set XP e ganhou check de Runa XP.
+- Aba Visual preserva a posição da planilha ao alterar células, move as builds para baixo e agrupa a build de dano crítico por temporada.
 
 ## 2026-08-06
 
