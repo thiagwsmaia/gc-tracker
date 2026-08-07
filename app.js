@@ -1,4 +1,6 @@
 const STORAGE_KEY = "gc-classic-tracker-v1";
+const UI_STATE_KEY = "gc-classic-tracker-ui-v1";
+const viewIds = ["dashboard", "characters", "daily", "voids", "titles", "visualSet", "visual", "gcfarm", "automation"];
 
 const characterImages = Object.fromEntries([
   "Elesis", "Lire", "Arme", "Lass", "Ryan", "Ronan", "Amy", "Jin", "Sieghart", "Mari", "Dio", "Zero",
@@ -677,7 +679,7 @@ const seed = {
 applyScreenshotFindings(seed);
 
 let state = loadState();
-let currentView = "dashboard";
+let currentView = loadCurrentView();
 let selectedCharacter = null;
 let selectedEquipmentSlot = null;
 let selectedEquipmentTab = "attributes";
@@ -687,6 +689,19 @@ let characterSort = "order";
 function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
   return saved ? migrateState(JSON.parse(saved)) : structuredClone(seed);
+}
+
+function loadCurrentView() {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(UI_STATE_KEY) || "{}");
+    return viewIds.includes(saved.currentView) ? saved.currentView : "dashboard";
+  } catch {
+    return "dashboard";
+  }
+}
+
+function saveCurrentView() {
+  sessionStorage.setItem(UI_STATE_KEY, JSON.stringify({ currentView }));
 }
 
 function migrateState(saved) {
@@ -859,6 +874,7 @@ function dailyDoneCount(char) {
 
 function render() {
   document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+  if (!viewIds.includes(currentView)) currentView = "dashboard";
   document.querySelector(`#${currentView}`).classList.add("active");
   document.querySelectorAll(".nav button").forEach(btn => btn.classList.toggle("active", btn.dataset.view === currentView));
   const titles = {
@@ -882,6 +898,13 @@ function render() {
   renderVisual();
   renderGcFarm();
   renderAutomation();
+}
+
+function setCurrentView(view) {
+  if (!viewIds.includes(view)) return;
+  currentView = view;
+  saveCurrentView();
+  render();
 }
 
 function renderDashboard() {
@@ -2710,8 +2733,7 @@ function applyOcrText() {
 
 document.querySelectorAll(".nav button").forEach(btn => {
   btn.addEventListener("click", () => {
-    currentView = btn.dataset.view;
-    render();
+    setCurrentView(btn.dataset.view);
   });
 });
 
