@@ -857,7 +857,7 @@ function render() {
     characters: "Personagens",
     daily: "Rotina",
     voids: "Itens",
-    titles: "Títulos",
+    titles: "XP",
     visualSet: "Visual",
     visual: "Coleção visual",
     gcfarm: "Catalogo GCFarm",
@@ -1648,7 +1648,7 @@ function renderTitles() {
     <section class="title-board-panel">
       <div class="title-board-toolbar">
         <div>
-          <h2>Títulos dos Personagens</h2>
+          <h2>XP dos Personagens</h2>
           <p class="muted">Andar da Torre, visual ferroviário, set de XP e acompanhamento dos títulos por personagem.</p>
         </div>
         <div class="title-board-legend">
