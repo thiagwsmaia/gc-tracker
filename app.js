@@ -426,7 +426,7 @@ const soleneRingOptions = [
   { id: "S5", label: "Anel Solene 5", icon: "./assets/mission-icons/solene-rings/solene-ring-5.png" }
 ];
 
-const titleStatusMilestones = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+const illusionTowerIcon = "./assets/title-icons/torre-das-ilusoes.png";
 const titleBoardItems = [
   { id: "void-1-title", name: "Título do Void 1", category: "Vazio", icon: "./assets/title-icons/void-1-real.png" },
   { id: "harrier-1-title", name: "Harrier I", category: "Harrier", icon: "./assets/title-icons/harrier-real-1-v8.png" },
@@ -642,6 +642,7 @@ const seed = {
     titles: { done: titles, total: titleBoardItems.length },
     titleBoard: Object.fromEntries(titleBoardItems.map((item, index) => [item.id, index < titles])),
     titleStatus: titleStatusDefault(ta),
+    titleExtras: { towerFloor: ["Lupus", "Lin", "Edel"].includes(name) ? 22 : 30, railwayVisual: false },
     visual: { missing: missingVisual, total: 15 },
     source: {
       visual: "planilha",
@@ -699,6 +700,11 @@ function migrateState(saved) {
       titles: { done: old.titles?.done ?? base.titles.done, total: titleBoardItems.length },
       titleBoard: { ...base.titleBoard, ...(old.titleBoard || {}) },
       titleStatus: { ...titleStatusDefault(old.ta ?? base.ta), ...(old.titleStatus || {}) },
+      titleExtras: {
+        ...base.titleExtras,
+        ...(old.titleExtras || {}),
+        towerFloor: Number(old.titleExtras?.towerFloor ?? old.daily?.andar ?? base.titleExtras.towerFloor)
+      },
       reviewStatus: old.reviewStatus || "needs-print"
     } : base;
   });
@@ -822,8 +828,7 @@ function saveState() {
 }
 
 function titleStatusDefault(ta) {
-  const totalAttack = Number(ta || 0);
-  return Object.fromEntries(titleStatusMilestones.map(value => [value, totalAttack >= value]));
+  return {};
 }
 
 function filteredCharacters() {
@@ -1644,13 +1649,13 @@ function renderTitles() {
       <div class="title-board-toolbar">
         <div>
           <h2>Títulos dos Personagens</h2>
-          <p class="muted">Status por TA e acompanhamento dos títulos por personagem.</p>
+          <p class="muted">Andar da Torre, visual ferroviário e acompanhamento dos títulos por personagem.</p>
         </div>
         <div class="title-board-legend">
           <span><i class="title-dot title-done"></i>feito</span>
           <span><i class="title-dot title-missing"></i>pendente</span>
-          <span><i class="title-dot title-status-ok"></i>TA atingido</span>
-          <span><i class="title-dot title-status-low"></i>faltando TA</span>
+          <span><i class="title-dot title-status-ok"></i>torre 30</span>
+          <span><i class="title-dot title-status-low"></i>em progresso</span>
         </div>
       </div>
       <div class="title-board-scroll">
@@ -1658,13 +1663,16 @@ function renderTitles() {
           <thead>
             <tr>
               <th class="title-date-head" colspan="2">Data: 26 julho.</th>
-              <th class="title-group-head" colspan="${titleStatusMilestones.length}">Status</th>
+              <th class="title-group-head" colspan="2">Progresso</th>
               ${groups.map(group => `<th class="title-group-head" colspan="${group.items.length}">${group.category}</th>`).join("")}
             </tr>
             <tr>
               <th class="title-character-head">Char</th>
               <th class="title-at-head">AT</th>
-              ${titleStatusMilestones.map(value => `<th class="title-status-head">${value}</th>`).join("")}
+              <th class="title-tower-head" title="Andar atual da Torre das Ilusões">
+                <img src="${illusionTowerIcon}" alt="Torre das Ilusões">
+              </th>
+              <th class="title-railway-head">Visual ferroviário</th>
               ${titleBoardItems.map(item => `
                 <th class="title-icon-head" title="${item.category}: ${item.name}">
                   <img src="${item.icon}" alt="${item.name}" onerror="this.style.display='none'">
@@ -1705,18 +1713,33 @@ function titleBoardRow(char) {
       <td class="title-at-cell">
         <input type="text" inputmode="numeric" value="${Number(char.ta || 0).toLocaleString("pt-BR")}" aria-label="AT de ${char.name}" onchange="setTitleAttack('${char.name}', this.value)" onblur="setTitleAttack('${char.name}', this.value)" onkeydown="if(event.key === 'Enter') this.blur()">
       </td>
-      ${titleStatusMilestones.map(value => titleStatusCell(char, value)).join("")}
+      ${titleTowerCell(char)}
+      ${titleRailwayCell(char)}
       ${titleBoardItems.map(item => titleProgressCell(char, item)).join("")}
     </tr>
   `;
 }
 
-function titleStatusCell(char, value) {
-  const done = char.titleStatus?.[value] ?? Number(char.ta || 0) >= value;
+function titleTowerCell(char) {
+  const floor = Math.max(1, Math.min(30, Number(char.titleExtras?.towerFloor || 1)));
+  const done = floor >= 30;
   return `
-    <td class="title-status-cell ${done ? "is-ready" : "is-low"}" title="${char.name}: marco ${value}">
-      <button type="button" aria-label="${char.name}: marco ${value}" onclick="toggleTitleStatus('${char.name}', ${value})">
-        ${done ? "<span>✓</span>" : ""}
+    <td class="title-tower-cell ${done ? "is-ready" : "is-low"}" title="${char.name}: Torre das Ilusões andar ${floor}">
+      <div class="tower-floor-control">
+        <input type="number" min="1" max="30" value="${floor}" aria-label="Andar da Torre de ${char.name}" onchange="setIllusionTowerFloor('${char.name}', this.value)" onblur="setIllusionTowerFloor('${char.name}', this.value)">
+        <button type="button" onclick="toggleIllusionTowerDone('${char.name}')" aria-label="${done ? "Limpar Torre 30" : "Marcar Torre 30"} de ${char.name}">${done ? "✓" : ""}</button>
+      </div>
+    </td>
+  `;
+}
+
+function titleRailwayCell(char) {
+  const done = Boolean(char.titleExtras?.railwayVisual);
+  return `
+    <td class="title-railway-cell ${done ? "is-done" : "is-missing"}" title="${char.name}: Visual ferroviário">
+      <button type="button" aria-label="${char.name}: Visual ferroviário" onclick="toggleRailwayVisual('${char.name}')">
+        <span>${done ? "✓" : ""}</span>
+        <small>Ferroviário</small>
       </button>
     </td>
   `;
@@ -1738,26 +1761,50 @@ function titleCompletedCount(char) {
   return titleBoardItems.filter(item => board[item.id]).length;
 }
 
+function rerenderTitlesKeepingScroll() {
+  const pageScroll = window.scrollY;
+  const titleScroll = document.querySelector("#titles .title-board-scroll");
+  const tableScroll = titleScroll ? { top: titleScroll.scrollTop, left: titleScroll.scrollLeft } : { top: 0, left: 0 };
+  renderTitles();
+  requestAnimationFrame(() => {
+    window.scrollTo(0, pageScroll);
+    const nextTitleScroll = document.querySelector("#titles .title-board-scroll");
+    if (nextTitleScroll) {
+      nextTitleScroll.scrollTop = tableScroll.top;
+      nextTitleScroll.scrollLeft = tableScroll.left;
+    }
+  });
+}
+
 function toggleTitleProgress(name, titleId) {
   const char = findChar(name);
   char.titleBoard = { ...(char.titleBoard || {}), [titleId]: !char.titleBoard?.[titleId] };
   char.titles = { done: titleCompletedCount(char), total: titleBoardItems.length };
   saveState();
-  renderTitles();
+  rerenderTitlesKeepingScroll();
 }
 
-function toggleTitleStatus(name, value) {
+function setIllusionTowerFloor(name, raw) {
   const char = findChar(name);
-  const current = char.titleStatus?.[value] ?? Number(char.ta || 0) >= value;
-  const next = !current;
-  const status = { ...titleStatusDefault(char.ta), ...(char.titleStatus || {}) };
-  titleStatusMilestones.forEach(milestone => {
-    if (next && milestone <= value) status[milestone] = true;
-    if (!next && milestone >= value) status[milestone] = false;
-  });
-  char.titleStatus = status;
+  const value = Math.max(1, Math.min(30, Math.round(Number(raw || 1))));
+  char.titleExtras = { ...(char.titleExtras || {}), towerFloor: value };
   saveState();
-  renderTitles();
+  rerenderTitlesKeepingScroll();
+}
+
+function toggleIllusionTowerDone(name) {
+  const char = findChar(name);
+  const current = Number(char.titleExtras?.towerFloor || 1);
+  char.titleExtras = { ...(char.titleExtras || {}), towerFloor: current >= 30 ? 1 : 30 };
+  saveState();
+  rerenderTitlesKeepingScroll();
+}
+
+function toggleRailwayVisual(name) {
+  const char = findChar(name);
+  char.titleExtras = { ...(char.titleExtras || {}), railwayVisual: !char.titleExtras?.railwayVisual };
+  saveState();
+  rerenderTitlesKeepingScroll();
 }
 
 function setTitleAttack(name, raw) {
@@ -1765,7 +1812,6 @@ function setTitleAttack(name, raw) {
   const value = Number(String(raw).replace(/\./g, "").replace(",", "."));
   if (!Number.isFinite(value) || value < 0) return;
   char.ta = Math.round(value);
-  char.titleStatus = titleStatusDefault(char.ta);
   saveState();
   renderTitles();
   renderDashboard();
@@ -1988,14 +2034,23 @@ function renderVisual() {
     const matchesFilter = visualCollectionFilter === "Todos" || row.attr === visualCollectionFilter;
     return matchesText && matchesFilter;
   });
+  const ownedTotals = visualCollectionTotals(visualRows);
   document.querySelector("#visual").innerHTML = `
     <section class="visual-collection-page">
-      <h2>Coleção Visual dos Personagens</h2>
-      <div class="visual-filter-row">
-        <label for="visualCollectionFilter">Filtrar por atributo:</label>
-        <select id="visualCollectionFilter" onchange="setVisualCollectionFilter(this.value)">
-          ${filters.map(filter => `<option value="${filter}" ${visualCollectionFilter === filter ? "selected" : ""}>${filter}</option>`).join("")}
-        </select>
+      <div class="visual-collection-top">
+        <div>
+          <h2>Coleção Visual dos Personagens</h2>
+          <div class="visual-filter-row">
+            <label for="visualCollectionFilter">Filtrar por atributo:</label>
+            <select id="visualCollectionFilter" onchange="setVisualCollectionFilter(this.value)">
+              ${filters.map(filter => `<option value="${filter}" ${visualCollectionFilter === filter ? "selected" : ""}>${filter}</option>`).join("")}
+            </select>
+          </div>
+        </div>
+        <aside class="visual-owned-summary">
+          <strong>Acumulado</strong>
+          ${ownedTotals.length ? ownedTotals.map(total => `<span>${escapeHtml(total.label)} <b>${escapeHtml(total.value)}</b></span>`).join("") : `<span>Nenhuma coleção marcada</span>`}
+        </aside>
       </div>
       <div class="visual-collection-count">${filteredRows.length}/${visualRows.length}</div>
       <div class="visual-card-grid">
@@ -2003,6 +2058,58 @@ function renderVisual() {
       </div>
     </section>
   `;
+}
+
+function visualCollectionTotals(rows) {
+  const totals = new Map();
+  rows.forEach(row => {
+    if (!state.visualCollectionOwned?.[row.id]) return;
+    const parsed = parseVisualAttribute(row.attr);
+    if (!parsed) return;
+    const current = totals.get(parsed.label) || { label: parsed.label, amount: 0, unit: parsed.unit };
+    current.amount += parsed.amount;
+    totals.set(parsed.label, current);
+  });
+  return gcFarmCatalog.visualAttributes
+    .map(parseVisualAttribute)
+    .filter(Boolean)
+    .map(attr => totals.get(attr.label))
+    .filter(Boolean)
+    .map(total => ({ label: visualOwnedSummaryLabel(total.label), value: formatVisualTotal(total.amount, total.unit) }));
+}
+
+function parseVisualAttribute(attr) {
+  const match = attr.match(/^(.*)\s\+([\d,.]+)(%)?$/);
+  if (!match) return null;
+  return {
+    label: match[1].trim(),
+    amount: Number(match[2].replace(/\./g, "").replace(",", ".")),
+    unit: match[3] || ""
+  };
+}
+
+function visualOwnedSummaryLabel(label) {
+  return label
+    .replace("ACERTO CRÍTICO", "Acerto crítico")
+    .replace("DANO CRÍTICO", "Dano crítico")
+    .replace("ATAQUE ESPECIAL", "Ataque especial")
+    .replace("ATAQUE", "Ataque")
+    .replace("DEFESA", "Defesa")
+    .replace("EXP", "EXP")
+    .replace("GP", "GP")
+    .replace("HP RECUPERADO", "HP recuperado")
+    .replace("MP RECUPERADO", "MP recuperado")
+    .replace("LANÇA INFERNAL, DANO", "Lança infernal")
+    .replace("RESISTÊNCIA A DANO DE ATAQUES CRÍTICOS", "Resist. dano crítico")
+    .replace("VITALIDADE", "Vitalidade");
+}
+
+function formatVisualTotal(amount, unit) {
+  const value = amount.toLocaleString("pt-BR", {
+    minimumFractionDigits: unit ? 2 : 0,
+    maximumFractionDigits: 2
+  });
+  return `+${value}${unit}`;
 }
 
 function visualCollectionCard(row) {

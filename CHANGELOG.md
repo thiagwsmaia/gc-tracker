@@ -1,5 +1,10 @@
 # Histórico do projeto
 
+## 2026-08-07
+
+- Coleção visual agora soma no canto os atributos acumulados das coleções marcadas com check.
+- Aba Títulos substitui os marcos 100-1000 por andar da Torre das Ilusões, check automático no andar 30 e check de Visual Ferroviário.
+
 ## 2026-08-06
 
 - Build perfeita de acerto crítico atualizada na aba Visual: Season 8 em calça/bota/capa/luva, Season 5 em escudo/elmo, Season 7 na arma, Season 9 em diadema/rosto/cota/asa e Season 6 na faca.
