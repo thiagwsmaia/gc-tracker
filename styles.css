@@ -2062,6 +2062,7 @@ th {
 
 .cell-best { background: #4f9f47; }
 .cell-good { background: #77ad62; }
+.cell-damage { background: #c79a3a; color: #111720; }
 .cell-warn { background: #c84f55; }
 .cell-neutral { background: #f2f4f6; color: #111720; }
 .cell-none { background: #333941; color: #f0f3f6; }

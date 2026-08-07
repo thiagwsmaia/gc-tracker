@@ -98,10 +98,24 @@ const visualSetRules = {
   Capa: { ideal: ["SEASON 8"], alt: [], hint: "acerto perfeito" },
   Arma: { ideal: ["SEASON 7"], alt: [], hint: "acerto perfeito" },
   Diadema: { ideal: ["SEASON 9"], alt: [], hint: "acerto perfeito" },
-  Mascara: { ideal: ["SEASON 9"], alt: [], hint: "acerto perfeito" },
+  Mascara: { ideal: ["SEASON 9", "SEASON 8"], alt: [], hint: "acerto perfeito" },
   Asas: { ideal: ["SEASON 9"], alt: [], hint: "acerto perfeito" },
   Facas: { ideal: ["SEASON 6"], alt: [], hint: "acerto perfeito" },
   Escudo: { ideal: ["SEASON 5"], alt: [], hint: "acerto perfeito" }
+};
+const visualDamageSetRules = {
+  Elmo: ["SEASON 8"],
+  Cota: ["SEASON 9"],
+  "Calça": ["SEASON 5"],
+  Luvas: ["SEASON 8"],
+  Sapatos: ["SEASON 8"],
+  Capa: ["SEASON 10"],
+  Arma: ["SEASON 9"],
+  Diadema: ["SEASON 9"],
+  Mascara: ["SEASON 10"],
+  Asas: ["SEASON 7"],
+  Facas: ["SEASON 9"],
+  Escudo: ["SEASON 8"]
 };
 const visualSetBuilds = [
   {
@@ -111,7 +125,7 @@ const visualSetBuilds = [
       ["Season 8", "4 peças", "Calça, bota, capa e luva"],
       ["Season 5", "2 peças", "Escudo e elmo"],
       ["Season 7", "1 peça", "Arma"],
-      ["Season 9", "4 peças", "Diadema, rosto, cota e asa"],
+      ["Season 9", "4 peças", "Diadema, rosto, cota e asa. Rosto S8 também fica como acerto no tracker"],
       ["Season 6", "1 peça", "Faca"]
     ]
   },
@@ -1904,7 +1918,7 @@ function renderVisualSet() {
         </div>
         <div class="visual-legend">
           <span><i class="legend-dot cell-best"></i>ideal da planilha</span>
-          <span><i class="legend-dot cell-neutral"></i>alternativa ou dano critico</span>
+          <span><i class="legend-dot cell-damage"></i>build de dano crítico</span>
           <span><i class="legend-dot cell-warn"></i>temporada ruim no slot</span>
           <span><i class="legend-dot cell-none"></i>vazio</span>
         </div>
@@ -1989,6 +2003,7 @@ function visualSetClass(slot, value) {
   const rule = visualSetRules[slot] || { ideal: [], alt: [] };
   if (rule.ideal[0] === value) return "cell-best";
   if (rule.ideal.includes(value)) return "cell-good";
+  if (visualDamageSetRules[slot]?.includes(value)) return "cell-damage";
   if (rule.alt.includes(value)) return "cell-neutral";
   return "cell-warn";
 }
@@ -1997,6 +2012,7 @@ function visualSetTitle(slot, value) {
   if (!value || value === "Nenhum") return `${slot}: vazio`;
   const rule = visualSetRules[slot] || { ideal: [], alt: [], hint: "" };
   if (rule.ideal.includes(value)) return `${slot}: ideal (${rule.hint})`;
+  if (visualDamageSetRules[slot]?.includes(value)) return `${slot}: build de dano crítico`;
   if (rule.alt.includes(value)) return `${slot}: alternativa (${rule.hint})`;
   return `${slot}: ruim para esse slot na tabela`;
 }

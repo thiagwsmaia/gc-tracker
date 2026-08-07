@@ -8,6 +8,7 @@
 - Aba Títulos foi renomeada visualmente para XP.
 - Aba XP compactou os checks de Visual Ferroviário e Set XP e ganhou check de Runa XP.
 - Aba Visual preserva a posição da planilha ao alterar células, move as builds para baixo e agrupa a build de dano crítico por temporada.
+- Cores da aba Visual passam a priorizar a build de acerto em verde, marcar build de dano crítico em amarelo e tratar Máscara Season 8 como acerto.
 
 ## 2026-08-06
 
