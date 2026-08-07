@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, shell } = require("electron");
 const fs = require("fs");
 const path = require("path");
 
-const appVersion = "20260807-collection-titles";
+const appVersion = "20260807-xp-set-check";
 const appIcon = path.join(__dirname, "assets", "icons", "gc-tracker-jin.ico");
 const reloadableExtensions = new Set([".html", ".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".ico"]);
 const ignoredPathParts = new Set([".git", "node_modules"]);

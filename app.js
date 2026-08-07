@@ -642,7 +642,7 @@ const seed = {
     titles: { done: titles, total: titleBoardItems.length },
     titleBoard: Object.fromEntries(titleBoardItems.map((item, index) => [item.id, index < titles])),
     titleStatus: titleStatusDefault(ta),
-    titleExtras: { towerFloor: ["Lupus", "Lin", "Edel"].includes(name) ? 22 : 30, railwayVisual: false },
+    titleExtras: { towerFloor: ["Lupus", "Lin", "Edel"].includes(name) ? 22 : 30, railwayVisual: false, hasXpSet: false },
     visual: { missing: missingVisual, total: 15 },
     source: {
       visual: "planilha",
@@ -1649,7 +1649,7 @@ function renderTitles() {
       <div class="title-board-toolbar">
         <div>
           <h2>Títulos dos Personagens</h2>
-          <p class="muted">Andar da Torre, visual ferroviário e acompanhamento dos títulos por personagem.</p>
+          <p class="muted">Andar da Torre, visual ferroviário, set de XP e acompanhamento dos títulos por personagem.</p>
         </div>
         <div class="title-board-legend">
           <span><i class="title-dot title-done"></i>feito</span>
@@ -1663,7 +1663,7 @@ function renderTitles() {
           <thead>
             <tr>
               <th class="title-date-head" colspan="2">Data: 26 julho.</th>
-              <th class="title-group-head" colspan="2">Progresso</th>
+              <th class="title-group-head" colspan="3">Progresso</th>
               ${groups.map(group => `<th class="title-group-head" colspan="${group.items.length}">${group.category}</th>`).join("")}
             </tr>
             <tr>
@@ -1673,6 +1673,7 @@ function renderTitles() {
                 <img src="${illusionTowerIcon}" alt="Torre das Ilusões">
               </th>
               <th class="title-railway-head">Visual ferroviário</th>
+              <th class="title-xp-head">Set XP</th>
               ${titleBoardItems.map(item => `
                 <th class="title-icon-head" title="${item.category}: ${item.name}">
                   <img src="${item.icon}" alt="${item.name}" onerror="this.style.display='none'">
@@ -1715,6 +1716,7 @@ function titleBoardRow(char) {
       </td>
       ${titleTowerCell(char)}
       ${titleRailwayCell(char)}
+      ${titleXpSetCell(char)}
       ${titleBoardItems.map(item => titleProgressCell(char, item)).join("")}
     </tr>
   `;
@@ -1740,6 +1742,18 @@ function titleRailwayCell(char) {
       <button type="button" aria-label="${char.name}: Visual ferroviário" onclick="toggleRailwayVisual('${char.name}')">
         <span>${done ? "✓" : ""}</span>
         <small>Ferroviário</small>
+      </button>
+    </td>
+  `;
+}
+
+function titleXpSetCell(char) {
+  const done = Boolean(char.titleExtras?.hasXpSet ?? char.titleExtras?.noXpSet);
+  return `
+    <td class="title-xp-cell ${done ? "is-done" : "is-missing"}" title="${char.name}: tem set de XP">
+      <button type="button" aria-label="${char.name}: tem set de XP" onclick="toggleXpSet('${char.name}')">
+        <span>${done ? "✓" : ""}</span>
+        <small>Tem XP</small>
       </button>
     </td>
   `;
@@ -1803,6 +1817,15 @@ function toggleIllusionTowerDone(name) {
 function toggleRailwayVisual(name) {
   const char = findChar(name);
   char.titleExtras = { ...(char.titleExtras || {}), railwayVisual: !char.titleExtras?.railwayVisual };
+  saveState();
+  rerenderTitlesKeepingScroll();
+}
+
+function toggleXpSet(name) {
+  const char = findChar(name);
+  const current = Boolean(char.titleExtras?.hasXpSet ?? char.titleExtras?.noXpSet);
+  char.titleExtras = { ...(char.titleExtras || {}), hasXpSet: !current };
+  delete char.titleExtras.noXpSet;
   saveState();
   rerenderTitlesKeepingScroll();
 }

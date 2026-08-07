@@ -4,6 +4,7 @@
 
 - Coleção visual agora soma no canto os atributos acumulados das coleções marcadas com check.
 - Aba Títulos substitui os marcos 100-1000 por andar da Torre das Ilusões, check automático no andar 30 e check de Visual Ferroviário.
+- Aba Títulos ganhou check por personagem para marcar quem tem set de XP.
 
 ## 2026-08-06
 
